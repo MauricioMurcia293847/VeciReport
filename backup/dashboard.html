@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VeciReport - Mi Panel</title>
+
+  <!-- Fuentes del proyecto -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Estilos globales y exclusivos -->
+  <link rel="stylesheet" href="Carpeta CSS/style.css">
+  <link rel="stylesheet" href="Carpeta CSS/dashboard.css">
+</head>
+
+<body class="dashboard-page">
+
+  <!-- Sidebar de navegación lateral -->
+  <aside class="sidebar" id="sidebar">
+
+    <!-- Logo en el sidebar -->
+    <div class="sidebar__brand">
+      <div class="navbar__logo">
+        <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+          <circle cx="14" cy="14" r="13" stroke="#00D4AA" stroke-width="2"/>
+          <path d="M14 7C10.134 7 7 10.134 7 14C7 17.866 10.134 21 14 21C17.866 21 21 17.866 21 14" stroke="#00D4AA" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="14" cy="14" r="3" fill="#00D4AA"/>
+          <path d="M14 11V7M17 14H21" stroke="#00D4AA" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="sidebar__name">VeciReport</span>
+    </div>
+
+    <!-- Links de navegación -->
+    <nav class="sidebar__nav">
+
+      <!-- Sección principal -->
+      <p class="sidebar__section-label">Principal</p>
+
+      <a href="dashboard.html" class="sidebar__link sidebar__link--active">
+        <!-- Ícono home -->
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <span>Inicio</span>
+      </a>
+
+      <a href="reporte.html" class="sidebar__link">
+        <!-- Ícono de reporte nuevo -->
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="16"/>
+          <line x1="8" y1="12" x2="16" y2="12"/>
+        </svg>
+        <span>Nuevo reporte</span>
+      </a>
+
+      <a href="mis-reportes.html" class="sidebar__link">
+        <!-- Ícono de lista -->
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="8" y1="6" x2="21" y2="6"/>
+          <line x1="8" y1="12" x2="21" y2="12"/>
+          <line x1="8" y1="18" x2="21" y2="18"/>
+          <line x1="3" y1="6" x2="3.01" y2="6"/>
+          <line x1="3" y1="12" x2="3.01" y2="12"/>
+          <line x1="3" y1="18" x2="3.01" y2="18"/>
+        </svg>
+        <span>Mis reportes</span>
+        <!-- Badge con cantidad de reportes activos -->
+        <span class="sidebar__badge">3</span>
+      </a>
+
+      <a href="directorio.html" class="sidebar__link">
+        <!-- Ícono de personas -->
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        <span>Trabajadores</span>
+      </a>
+
+      <!-- Sección cuenta -->
+      <p class="sidebar__section-label">Cuenta</p>
+
+      <a href="perfil.html" class="sidebar__link">
+        <!-- Ícono de usuario -->
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span>Mi perfil</span>
+      </a>
+
+      <a href="app/controllers/UsuarioController.php?accion=logout" class="sidebar__link sidebar__link--logout">
+        <!-- Ícono de salir -->
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        <span>Cerrar sesión</span>
+      </a>
+
+    </nav>
+
+    <!-- Info del usuario logueado en la parte baja del sidebar -->
+    <div class="sidebar__user">
+      <div class="sidebar__user-avatar">JG</div>
+      <div class="sidebar__user-info">
+        <!-- En producción esto lo llena PHP con datos de sesión -->
+        <p class="sidebar__user-name">Juan García</p>
+        <p class="sidebar__user-role">Vecino · Casa #24</p>
+      </div>
+    </div>
+
+  </aside>
+  <!-- Fin sidebar -->
+
+
+  <!-- Overlay oscuro para cerrar el sidebar en móvil -->
+  <div class="sidebar__overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+
+  <!-- Contenido principal -->
+  <main class="dashboard-main" id="dashboardMain">
+
+    <!-- Topbar: barra superior del contenido -->
+    <header class="topbar">
+      <!-- Botón hamburguesa para abrir el sidebar en móvil -->
+      <button class="topbar__toggle" onclick="toggleSidebar()" aria-label="Abrir menú">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+
+      <!-- Título de la página actual -->
+      <div class="topbar__title">
+        <h1>Inicio</h1>
+        <p>Bienvenido de vuelta, <span>Juan</span></p>
+      </div>
+
+      <!-- Acciones del lado derecho -->
+      <div class="topbar__actions">
+
+        <!-- Botón de notificaciones con badge -->
+        <button class="topbar__icon-btn" onclick="toggleNotifs()" aria-label="Notificaciones">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <!-- Punto rojo que indica notificaciones sin leer -->
+          <span class="topbar__notif-dot"></span>
+        </button>
+
+        <!-- Panel de notificaciones desplegable -->
+        <div class="notif-panel" id="notifPanel">
+          <div class="notif-panel__header">
+            <p class="notif-panel__title">Notificaciones</p>
+            <button class="notif-panel__clear" onclick="limpiarNotifs()">Limpiar</button>
+          </div>
+          <div class="notif-panel__list">
+
+            <div class="notif-item notif-item--unread">
+              <div class="notif-item__icon notif-item__icon--green">✓</div>
+              <div>
+                <p class="notif-item__text">Tu reporte #0043 fue marcado como <strong>Atendido</strong></p>
+                <p class="notif-item__time">Hace 1 hora</p>
+              </div>
+            </div>
+
+            <div class="notif-item notif-item--unread">
+              <div class="notif-item__icon notif-item__icon--yellow">⏳</div>
+              <div>
+                <p class="notif-item__text">Tu reporte #0047 está <strong>En proceso</strong></p>
+                <p class="notif-item__time">Hace 2 horas</p>
+              </div>
+            </div>
+
+            <div class="notif-item">
+              <div class="notif-item__icon notif-item__icon--blue">ℹ</div>
+              <div>
+                <p class="notif-item__text">Trabajador <strong>Juan R.</strong> fue asignado a tu reporte</p>
+                <p class="notif-item__time">Ayer</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Avatar del usuario -->
+        <div class="topbar__avatar">JG</div>
+      </div>
+    </header>
+    <!-- Fin topbar -->
+
+
+    <!-- Contenido del dashboard -->
+    <div class="dashboard-content">
+
+      <!-- Tarjetas de resumen (KPIs) -->
+      <div class="kpi-grid">
+
+        <div class="kpi-card kpi-card--total">
+          <div class="kpi-card__icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+          </div>
+          <div class="kpi-card__info">
+            <p class="kpi-card__label">Total reportes</p>
+            <p class="kpi-card__num">7</p>
+          </div>
+        </div>
+
+        <div class="kpi-card kpi-card--proceso">
+          <div class="kpi-card__icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <div class="kpi-card__info">
+            <p class="kpi-card__label">En proceso</p>
+            <p class="kpi-card__num">3</p>
+          </div>
+        </div>
+
+        <div class="kpi-card kpi-card--atendidos">
+          <div class="kpi-card__icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <div class="kpi-card__info">
+            <p class="kpi-card__label">Atendidos</p>
+            <p class="kpi-card__num">4</p>
+          </div>
+        </div>
+
+        <div class="kpi-card kpi-card--pendientes">
+          <div class="kpi-card__icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+          </div>
+          <div class="kpi-card__info">
+            <p class="kpi-card__label">Pendientes</p>
+            <p class="kpi-card__num">0</p>
+          </div>
+        </div>
+
+      </div>
+      <!-- Fin KPIs -->
+
+
+      <!-- Grid principal: reportes recientes + acción rápida -->
+      <div class="dashboard-grid">
+
+        <!-- Tabla de reportes recientes -->
+        <section class="dash-section dash-section--reportes">
+          <div class="dash-section__header">
+            <h2 class="dash-section__title">Mis reportes recientes</h2>
+            <a href="mis-reportes.html" class="dash-section__link">Ver todos →</a>
+          </div>
+
+          <div class="reportes-list">
+
+            <!-- Reporte 1 -->
+            <div class="reporte-item">
+              <div class="reporte-item__cat reporte-item__cat--agua">💧</div>
+              <div class="reporte-item__info">
+                <p class="reporte-item__title">Fuga de agua en calle principal</p>
+                <p class="reporte-item__meta">Reporte #0047 · Hace 2 horas</p>
+              </div>
+              <span class="reporte-item__status reporte-item__status--proceso">En proceso</span>
+            </div>
+
+            <!-- Reporte 2 -->
+            <div class="reporte-item">
+              <div class="reporte-item__cat reporte-item__cat--luz">💡</div>
+              <div class="reporte-item__info">
+                <p class="reporte-item__title">Poste de luz apagado frente a #12</p>
+                <p class="reporte-item__meta">Reporte #0043 · Hace 1 día</p>
+              </div>
+              <span class="reporte-item__status reporte-item__status--atendido">Atendido</span>
+            </div>
+
+            <!-- Reporte 3 -->
+            <div class="reporte-item">
+              <div class="reporte-item__cat reporte-item__cat--otros">🔧</div>
+              <div class="reporte-item__info">
+                <p class="reporte-item__title">Bache en acceso principal</p>
+                <p class="reporte-item__meta">Reporte #0039 · Hace 3 días</p>
+              </div>
+              <span class="reporte-item__status reporte-item__status--proceso">En proceso</span>
+            </div>
+
+            <!-- Reporte 4 -->
+            <div class="reporte-item">
+              <div class="reporte-item__cat reporte-item__cat--agua">💧</div>
+              <div class="reporte-item__info">
+                <p class="reporte-item__title">Sin suministro de agua calle 3</p>
+                <p class="reporte-item__meta">Reporte #0035 · Hace 5 días</p>
+              </div>
+              <span class="reporte-item__status reporte-item__status--atendido">Atendido</span>
+            </div>
+
+          </div>
+        </section>
+
+
+        <!-- Columna derecha -->
+        <div class="dash-right">
+
+          <!-- Botón de acción rápida para nuevo reporte -->
+          <section class="dash-section dash-section--nuevo">
+            <h2 class="dash-section__title">Nuevo reporte</h2>
+            <p class="dash-section__desc">¿Hay un problema en tu comunidad? Repórtalo ahora y lo asignamos al instante.</p>
+            <div class="quick-cats">
+              <a href="reporte.html?tipo=luz" class="quick-cat quick-cat--luz">
+                <span>💡</span> Luz
+              </a>
+              <a href="reporte.html?tipo=agua" class="quick-cat quick-cat--agua">
+                <span>💧</span> Agua
+              </a>
+              <a href="reporte.html?tipo=trabajadores" class="quick-cat quick-cat--trabajadores">
+                <span>🔧</span> Trabajadores
+              </a>
+              <a href="reporte.html?tipo=otros" class="quick-cat quick-cat--otros">
+                <span>📋</span> Otros
+              </a>
+            </div>
+            <a href="reporte.html" class="btn btn--primary btn--full-w">
+              Levantar reporte completo
+            </a>
+          </section>
+
+          <!-- Trabajador asignado activo -->
+          <section class="dash-section dash-section--trabajador">
+            <h2 class="dash-section__title">Trabajador asignado</h2>
+            <p class="dash-section__desc">Para tu reporte #0047 (Agua)</p>
+            <div class="worker-card">
+              <div class="worker-card__avatar">JR</div>
+              <div class="worker-card__info">
+                <p class="worker-card__name">Juan Rodríguez</p>
+                <p class="worker-card__role">Plomero · 38 años</p>
+                <a href="tel:6561234567" class="worker-card__tel">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.64 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+                  </svg>
+                  656-123-4567
+                </a>
+              </div>
+              <div class="worker-card__status">
+                <span class="badge__dot"></span> Disponible
+              </div>
+            </div>
+          </section>
+
+        </div>
+        <!-- Fin columna derecha -->
+
+      </div>
+      <!-- Fin grid principal -->
+
+    </div>
+    <!-- Fin contenido dashboard -->
+
+  </main>
+  <!-- Fin contenido principal -->
+
+
+  <script src="Carpeta JS/funciones.js"></script>
+
+  <script>
+
+    /* Abrir/cerrar sidebar en móvil */
+    function toggleSidebar() {
+      const sidebar  = document.getElementById('sidebar');
+      const overlay  = document.getElementById('sidebarOverlay');
+      sidebar.classList.toggle('sidebar--open');
+      overlay.classList.toggle('overlay--visible');
+    }
+
+    /* Abrir/cerrar panel de notificaciones */
+    function toggleNotifs() {
+      const panel = document.getElementById('notifPanel');
+      panel.classList.toggle('notif-panel--open');
+    }
+
+    /* Limpiar notificaciones: quita el punto rojo y las marca como leídas */
+    function limpiarNotifs() {
+      document.querySelectorAll('.notif-item--unread').forEach(el => {
+        el.classList.remove('notif-item--unread');
+      });
+      document.querySelector('.topbar__notif-dot').style.display = 'none';
+    }
+
+    /* Cierra el panel de notificaciones al hacer clic fuera de él */
+    document.addEventListener('click', function(e) {
+      const panel  = document.getElementById('notifPanel');
+      const btn    = document.querySelector('.topbar__icon-btn');
+      if (!panel.contains(e.target) && !btn.contains(e.target)) {
+        panel.classList.remove('notif-panel--open');
+      }
+    });
+
+    /* Animación de entrada de las KPI cards con delay escalonado */
+    document.querySelectorAll('.kpi-card').forEach((card, i) => {
+      card.style.animationDelay = `${i * 0.08}s`;
+      card.classList.add('animate-in');
+    });
+
+  </script>
+
+</body>
+</html>

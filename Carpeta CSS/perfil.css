@@ -1,0 +1,355 @@
+/* perfil.css - Perfil del vecino
+   Se carga junto con style.css y dashboard.css */
+
+
+/* Layout de dos columnas: datos principales + aside con stats */
+.perfil-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 20px;
+  align-items: start;
+}
+
+.perfil-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.perfil-section {
+  position: relative;
+}
+
+
+/* Botón de editar en el header de la sección */
+.perfil-edit-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  padding: 6px 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition);
+}
+.perfil-edit-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+
+/* Avatar grande + nombre del vecino */
+.perfil-avatar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.perfil-avatar {
+  width: 64px; height: 64px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.perfil-nombre-big {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.perfil-rol-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: rgba(232, 93, 38, 0.1);
+  border: 1px solid rgba(232, 93, 38, 0.25);
+  padding: 3px 12px;
+  border-radius: 50px;
+}
+
+
+/* Grid de 2 columnas para los campos del perfil */
+.perfil-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 4px;
+}
+
+.perfil-grid--full {
+  grid-column: 1 / -1;
+}
+
+/* Input deshabilitado (modo solo lectura) */
+.perfil-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: var(--primary);
+}
+
+.form__group {
+  margin-bottom: 0;
+}
+
+.form__label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.form__input {
+  width: 100%;
+  padding: 11px 14px;
+  background: var(--primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  outline: none;
+  transition: var(--transition);
+}
+.form__input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+
+/* Subsección dentro del formulario (domicilio, contraseña) */
+.perfil-section__sub {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.perfil-section__sub-title {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+
+/* Botones de guardar/cancelar */
+.perfil-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+
+/* Columna aside: estadísticas, comprobante, accesos */
+.perfil-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 80px;
+}
+
+
+/* Grid de 3 estadísticas */
+.perfil-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.perfil-stat {
+  text-align: center;
+  padding: 12px 8px;
+  background: var(--primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.perfil-stat__num {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.perfil-stat__label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+
+/* Barra de progreso de tasa de resolución */
+.perfil-progress__label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.perfil-progress__pct {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.perfil-progress__bar {
+  height: 6px;
+  background: var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.perfil-progress__fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 6px;
+  transition: width 1s ease;
+}
+
+
+/* Estado del comprobante de domicilio */
+.comprobante-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px;
+  border-radius: var(--radius-sm);
+}
+
+.comprobante-status--verificado {
+  background: rgba(232, 93, 38, 0.06);
+  border: 1px solid rgba(232, 93, 38, 0.2);
+}
+
+.comprobante-status__icon {
+  width: 36px; height: 36px;
+  background: rgba(232, 93, 38, 0.15);
+  color: var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.comprobante-status__title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.comprobante-status__desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+
+/* Historial de acceso reciente */
+.perfil-accesos {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.perfil-acceso {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.perfil-acceso__dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.perfil-acceso__dot--green {
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent-glow);
+}
+
+.perfil-acceso__text {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.perfil-acceso__time {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+
+
+/* Toast de confirmación */
+.toast {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  background: var(--primary-light);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 13px 20px;
+  font-size: 0.88rem;
+  color: var(--text);
+  box-shadow: var(--shadow);
+  z-index: 300;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+.toast--visible  { opacity: 1; transform: translateY(0); }
+.toast--success  { border-color: rgba(232, 93, 38, 0.4); color: var(--accent); }
+.toast--error    { border-color: rgba(255, 90, 90, 0.4); color: #FF5A5A; }
+
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .perfil-layout { grid-template-columns: 1fr; }
+
+  .perfil-aside {
+    position: static;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .perfil-grid  { grid-template-columns: 1fr; }
+  .perfil-aside { grid-template-columns: 1fr; }
+  .perfil-stats { grid-template-columns: repeat(3, 1fr); }
+}

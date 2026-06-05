@@ -1,0 +1,541 @@
+<?php require_once 'App/helpers/auth.php'; generarCSRF(); ?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VeciReport - Registro</title>
+
+  <!-- Fuentes del proyecto: Syne (títulos) y DM Sans (cuerpo) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Estilos globales del proyecto -->
+  <link rel="stylesheet" href="Carpeta CSS/style.css">
+
+  <!-- Estilos exclusivos de esta página -->
+  <link rel="stylesheet" href="Carpeta CSS/registro.css">
+</head>
+
+<body class="registro-page">
+
+  <!-- Navbar con logo y link al login -->
+  <nav class="navbar navbar--simple">
+    <a href="index.html" class="navbar__brand">
+      <div class="navbar__logo">
+        <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+          <circle cx="14" cy="14" r="13" stroke="#00D4AA" stroke-width="2"/>
+          <path d="M14 7C10.134 7 7 10.134 7 14C7 17.866 10.134 21 14 21C17.866 21 21 17.866 21 14" stroke="#00D4AA" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="14" cy="14" r="3" fill="#00D4AA"/>
+          <path d="M14 11V7M17 14H21" stroke="#00D4AA" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="navbar__name">VeciReport</span>
+    </a>
+
+    <div class="navbar__actions">
+      <span class="navbar__hint">¿Ya tienes cuenta?</span>
+      <a href="login.html" class="btn btn--primary">Iniciar sesión</a>
+    </div>
+  </nav>
+
+
+  <!-- Layout principal: formulario centrado con fondo decorativo -->
+  <main class="registro-layout">
+
+    <!-- Fondo decorativo igual al hero del index -->
+    <div class="registro__bg">
+      <div class="registro__circle registro__circle--1"></div>
+      <div class="registro__circle registro__circle--2"></div>
+      <div class="registro__grid"></div>
+    </div>
+
+    <!-- Contenedor del formulario -->
+    <div class="registro__wrap">
+
+      <!-- Encabezado -->
+      <div class="registro__header">
+        <p class="registro__tag">Únete a la comunidad</p>
+        <h1 class="registro__title">Crea tu cuenta</h1>
+        <p class="registro__subtitle">
+          Regístrate como vecino verificado para comenzar a reportar incidencias.
+        </p>
+      </div>
+
+      <!-- Indicador de pasos (el registro tiene 2 pasos) -->
+      <div class="steps-indicator">
+        <div class="step step--active" id="step-dot-1">
+          <div class="step__dot">1</div>
+          <span class="step__label">Datos personales</span>
+        </div>
+        <div class="step__line"></div>
+        <div class="step" id="step-dot-2">
+          <div class="step__dot">2</div>
+          <span class="step__label">Domicilio y verificación</span>
+        </div>
+      </div>
+
+      <!-- Formulario multi-paso -->
+      <!-- action apunta al controlador PHP, method POST para no exponer datos en URL -->
+      <form class="registro__form" action="app/controllers/UsuarioController.php" method="POST" enctype="multipart/form-data" novalidate>
+
+        <!-- Campo oculto para indicarle al controlador la acción -->
+        <input type="hidden" name="accion" value="registro">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+
+
+        <!-- PASO 1: Datos personales -->
+        <div class="form-step" id="paso-1">
+
+          <div class="form__row">
+            <!-- Nombre -->
+            <div class="form__group">
+              <label class="form__label" for="nombre">Nombre(s)</label>
+              <div class="form__input-wrap">
+                <span class="form__icon">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                  </svg>
+                </span>
+                <input type="text" id="nombre" name="nombre" class="form__input" placeholder="Juan" required>
+              </div>
+              <span class="form__error" id="error-nombre"></span>
+            </div>
+
+            <!-- Apellidos -->
+            <div class="form__group">
+              <label class="form__label" for="apellidos">Apellidos</label>
+              <div class="form__input-wrap">
+                <span class="form__icon">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                  </svg>
+                </span>
+                <input type="text" id="apellidos" name="apellidos" class="form__input" placeholder="Pérez García" required>
+              </div>
+              <span class="form__error" id="error-apellidos"></span>
+            </div>
+          </div>
+
+          <!-- Correo electrónico -->
+          <div class="form__group">
+            <label class="form__label" for="correo">Correo electrónico</label>
+            <div class="form__input-wrap">
+              <span class="form__icon">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="4" width="20" height="16" rx="2"/>
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                </svg>
+              </span>
+              <input type="email" id="correo" name="correo" class="form__input" placeholder="tucorreo@ejemplo.com" autocomplete="email" required>
+            </div>
+            <span class="form__error" id="error-correo"></span>
+          </div>
+
+          <!-- Contraseña -->
+          <div class="form__group">
+            <label class="form__label" for="password">Contraseña</label>
+            <div class="form__input-wrap">
+              <span class="form__icon">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+              </span>
+              <input type="password" id="password" name="password" class="form__input" placeholder="Mínimo 6 caracteres" required>
+              <button type="button" class="form__toggle-pass" onclick="togglePass('password', 'eye1', 'eye1-off')" aria-label="Mostrar contraseña">
+                <svg id="eye1" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+                <svg id="eye1-off" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                  <line x1="1" y1="1" x2="23" y2="23"/>
+                </svg>
+              </button>
+            </div>
+            <!-- Indicador visual de seguridad de la contraseña -->
+            <div class="password-strength" id="passStrength">
+              <div class="password-strength__bar">
+                <div class="password-strength__fill" id="strengthFill"></div>
+              </div>
+              <span class="password-strength__label" id="strengthLabel"></span>
+            </div>
+            <span class="form__error" id="error-password"></span>
+          </div>
+
+          <!-- Confirmar contraseña -->
+          <div class="form__group">
+            <label class="form__label" for="password2">Confirmar contraseña</label>
+            <div class="form__input-wrap">
+              <span class="form__icon">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+              </span>
+              <input type="password" id="password2" name="password2" class="form__input" placeholder="Repite tu contraseña" required>
+              <button type="button" class="form__toggle-pass" onclick="togglePass('password2', 'eye2', 'eye2-off')" aria-label="Mostrar contraseña">
+                <svg id="eye2" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+                <svg id="eye2-off" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                  <line x1="1" y1="1" x2="23" y2="23"/>
+                </svg>
+              </button>
+            </div>
+            <span class="form__error" id="error-password2"></span>
+          </div>
+
+          <!-- Botón para avanzar al paso 2 -->
+          <button type="button" class="btn btn--primary btn--full" onclick="irPaso2()">
+            Continuar
+          </button>
+
+          <p class="registro__login-link">
+            ¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a>
+          </p>
+
+        </div>
+        <!-- Fin paso 1 -->
+
+
+        <!-- PASO 2: Domicilio y comprobante -->
+        <!-- Oculto por defecto, se muestra al avanzar con JS -->
+        <div class="form-step" id="paso-2" style="display:none">
+
+          <div class="form__row">
+            <!-- Número de calle -->
+            <div class="form__group">
+              <label class="form__label" for="num_calle">Número de calle</label>
+              <div class="form__input-wrap">
+                <span class="form__icon">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                  </svg>
+                </span>
+                <input type="text" id="num_calle" name="num_calle" class="form__input" placeholder="Ej: Calle Roble" required>
+              </div>
+              <span class="form__error" id="error-num_calle"></span>
+            </div>
+
+            <!-- Número de casa -->
+            <div class="form__group">
+              <label class="form__label" for="num_casa">Número de casa</label>
+              <div class="form__input-wrap">
+                <span class="form__icon">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="3" width="20" height="14" rx="2"/>
+                    <line x1="8" y1="21" x2="16" y2="21"/>
+                    <line x1="12" y1="17" x2="12" y2="21"/>
+                  </svg>
+                </span>
+                <input type="text" id="num_casa" name="num_casa" class="form__input" placeholder="Ej: #24" required>
+              </div>
+              <span class="form__error" id="error-num_casa"></span>
+            </div>
+          </div>
+
+          <!-- Color de la casa (se usara también en los reportes para ubicación) -->
+          <div class="form__group">
+            <label class="form__label" for="color_casa">Color de la casa</label>
+            <div class="form__input-wrap">
+              <span class="form__icon">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
+                  <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
+                  <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
+                  <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
+                  <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+                </svg>
+              </span>
+              <input type="text" id="color_casa" name="color_casa" class="form__input" placeholder="Ej: Beige, Blanco, Azul..." required>
+            </div>
+            <span class="form__error" id="error-color_casa"></span>
+          </div>
+
+          <!-- Subida del comprobante de domicilio -->
+          <div class="form__group">
+            <label class="form__label">Comprobante de domicilio</label>
+            <p class="form__hint">Sube una foto o PDF de tu comprobante (agua, luz, predial). Máx. 5MB.</p>
+
+            <!-- Zona de drag & drop para subir archivo -->
+            <div class="file-drop" id="fileDrop" onclick="document.getElementById('comprobante').click()">
+              <!-- Ícono de subida -->
+              <div class="file-drop__icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="17 8 12 3 7 8"/>
+                  <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+              </div>
+              <p class="file-drop__text">Haz clic o arrastra tu archivo aquí</p>
+              <p class="file-drop__hint">JPG, PNG o PDF</p>
+              <!-- Nombre del archivo seleccionado (se actualiza con JS) -->
+              <p class="file-drop__name" id="fileName" style="display:none"></p>
+            </div>
+
+            <!-- Input file oculto, se activa al hacer clic en la zona de drop -->
+            <input
+              type="file"
+              id="comprobante"
+              name="comprobante"
+              accept=".jpg,.jpeg,.png,.pdf"
+              style="display:none"
+              onchange="mostrarArchivo(this)"
+            >
+            <span class="form__error" id="error-comprobante"></span>
+          </div>
+
+          <!-- Términos y condiciones -->
+          <div class="form__group form__group--check">
+            <label class="form__check-label">
+              <input type="checkbox" name="terminos" id="terminos" class="form__checkbox">
+              <span class="form__check-custom"></span>
+              Acepto los <a href="#" class="form__link-inline">términos y condiciones</a> del sistema
+            </label>
+            <span class="form__error" id="error-terminos"></span>
+          </div>
+
+          <!-- Botones de acción del paso 2 -->
+          <div class="form__actions">
+            <!-- Regresar al paso 1 -->
+            <button type="button" class="btn btn--ghost btn--back" onclick="irPaso1()">
+              ← Regresar
+            </button>
+
+            <!-- Submit final del formulario -->
+            <button type="submit" class="btn btn--primary btn--submit" id="btnRegistro">
+              <span class="btn__text">Crear cuenta</span>
+              <span class="btn__spinner" id="spinner" style="display:none"></span>
+            </button>
+          </div>
+
+        </div>
+        <!-- Fin paso 2 -->
+
+      </form>
+    </div>
+    <!-- Fin contenedor formulario -->
+
+  </main>
+
+
+  <script src="Carpeta JS/funciones.js"></script>
+
+  <script>
+
+    /* Mostrar/ocultar contraseña, reutilizable para ambos campos de password */
+    function togglePass(inputId, eyeId, eyeOffId) {
+      const input  = document.getElementById(inputId);
+      const eye    = document.getElementById(eyeId);
+      const eyeOff = document.getElementById(eyeOffId);
+
+      if (input.type === 'password') {
+        input.type           = 'text';
+        eye.style.display    = 'none';
+        eyeOff.style.display = 'block';
+      } else {
+        input.type           = 'password';
+        eye.style.display    = 'block';
+        eyeOff.style.display = 'none';
+      }
+    }
+
+    /* Indicador de seguridad de la contraseña en tiempo real */
+    document.getElementById('password').addEventListener('input', function () {
+      const val    = this.value;
+      const fill   = document.getElementById('strengthFill');
+      const label  = document.getElementById('strengthLabel');
+      const wrap   = document.getElementById('passStrength');
+
+      if (!val) {
+        wrap.style.display = 'none';
+        return;
+      }
+
+      wrap.style.display = 'flex';
+
+      /* Calcula el nivel de seguridad según los criterios que cumpla */
+      let nivel = 0;
+      if (val.length >= 6)              nivel++;
+      if (val.length >= 10)             nivel++;
+      if (/[A-Z]/.test(val))            nivel++;
+      if (/[0-9]/.test(val))            nivel++;
+      if (/[^A-Za-z0-9]/.test(val))     nivel++;
+
+      /* Asigna color y texto según el nivel */
+      const niveles = [
+        { label: 'Muy débil', color: '#FF5A5A', width: '20%' },
+        { label: 'Débil',     color: '#FF8C42', width: '40%' },
+        { label: 'Regular',   color: '#FFB800', width: '60%' },
+        { label: 'Fuerte',    color: '#00D4AA', width: '80%' },
+        { label: 'Muy fuerte',color: '#00FFCC', width: '100%' },
+      ];
+
+      const actual       = niveles[Math.min(nivel - 1, 4)] || niveles[0];
+      fill.style.width   = actual.width;
+      fill.style.background = actual.color;
+      label.textContent  = actual.label;
+      label.style.color  = actual.color;
+    });
+
+    /* Validación del paso 1 antes de avanzar al paso 2 */
+    function irPaso2() {
+      let valido = true;
+
+      /* Limpia errores previos */
+      ['nombre','apellidos','correo','password','password2'].forEach(id => {
+        document.getElementById('error-' + id).textContent = '';
+      });
+
+      const nombre    = document.getElementById('nombre').value.trim();
+      const apellidos = document.getElementById('apellidos').value.trim();
+      const correo    = document.getElementById('correo').value.trim();
+      const password  = document.getElementById('password').value;
+      const password2 = document.getElementById('password2').value;
+      const regex     = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!nombre) {
+        document.getElementById('error-nombre').textContent = 'El nombre es obligatorio.';
+        valido = false;
+      }
+      if (!apellidos) {
+        document.getElementById('error-apellidos').textContent = 'Los apellidos son obligatorios.';
+        valido = false;
+      }
+      if (!correo) {
+        document.getElementById('error-correo').textContent = 'El correo es obligatorio.';
+        valido = false;
+      } else if (!regex.test(correo)) {
+        document.getElementById('error-correo').textContent = 'Ingresa un correo válido.';
+        valido = false;
+      }
+      if (!password) {
+        document.getElementById('error-password').textContent = 'La contraseña es obligatoria.';
+        valido = false;
+      } else if (password.length < 6) {
+        document.getElementById('error-password').textContent = 'Mínimo 6 caracteres.';
+        valido = false;
+      }
+      if (password !== password2) {
+        document.getElementById('error-password2').textContent = 'Las contraseñas no coinciden.';
+        valido = false;
+      }
+
+      if (valido) {
+        /* Muestra el paso 2 y oculta el paso 1 */
+        document.getElementById('paso-1').style.display = 'none';
+        document.getElementById('paso-2').style.display = 'block';
+
+        /* Actualiza el indicador de pasos */
+        document.getElementById('step-dot-1').classList.remove('step--active');
+        document.getElementById('step-dot-1').classList.add('step--done');
+        document.getElementById('step-dot-2').classList.add('step--active');
+
+        /* Sube el scroll al inicio del formulario */
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    /* Regresa al paso 1 desde el paso 2 */
+    function irPaso1() {
+      document.getElementById('paso-2').style.display = 'none';
+      document.getElementById('paso-1').style.display = 'block';
+      document.getElementById('step-dot-2').classList.remove('step--active');
+      document.getElementById('step-dot-1').classList.remove('step--done');
+      document.getElementById('step-dot-1').classList.add('step--active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* Muestra el nombre del archivo seleccionado en la zona de drop */
+    function mostrarArchivo(input) {
+      const fileName = document.getElementById('fileName');
+      const fileDrop = document.getElementById('fileDrop');
+
+      if (input.files && input.files[0]) {
+        fileName.textContent     = '📎 ' + input.files[0].name;
+        fileName.style.display   = 'block';
+        fileDrop.classList.add('file-drop--active');
+      }
+    }
+
+    /* Drag & drop: eventos para resaltar la zona al arrastrar un archivo */
+    const fileDrop = document.getElementById('fileDrop');
+
+    fileDrop.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      fileDrop.classList.add('file-drop--hover');
+    });
+
+    fileDrop.addEventListener('dragleave', () => {
+      fileDrop.classList.remove('file-drop--hover');
+    });
+
+    fileDrop.addEventListener('drop', (e) => {
+      e.preventDefault();
+      fileDrop.classList.remove('file-drop--hover');
+      const archivo = e.dataTransfer.files[0];
+      if (archivo) {
+        /* Asigna el archivo al input file real */
+        const dt  = new DataTransfer();
+        dt.items.add(archivo);
+        document.getElementById('comprobante').files = dt.files;
+        mostrarArchivo(document.getElementById('comprobante'));
+      }
+    });
+
+    /* Validación del paso 2 antes de enviar al servidor */
+    document.querySelector('.registro__form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      let valido = true;
+
+      ['num_calle','num_casa','color_casa'].forEach(id => {
+        document.getElementById('error-' + id).textContent = '';
+      });
+
+      const numCalle   = document.getElementById('num_calle').value.trim();
+      const numCasa    = document.getElementById('num_casa').value.trim();
+      const colorCasa  = document.getElementById('color_casa').value.trim();
+      const comprobante = document.getElementById('comprobante').files.length;
+      const terminos   = document.getElementById('terminos').checked;
+
+      if (!numCalle) {
+        document.getElementById('error-num_calle').textContent = 'El número de calle es obligatorio.';
+        valido = false;
+      }
+      if (!numCasa) {
+        document.getElementById('error-num_casa').textContent = 'El número de casa es obligatorio.';
+        valido = false;
+      }
+      if (!colorCasa) {
+        document.getElementById('error-color_casa').textContent = 'El color de la casa es obligatorio.';
+        valido = false;
+      }
+      if (!comprobante) {
+        document.getElementById('error-comprobante').textContent = 'Debes subir tu comprobante de domicilio.';
+        valido = false;
+      }
+      if (!terminos) {
+        document.getElementById('error-terminos').textContent = 'Debes aceptar los términos y condiciones.';
+        valido = false;
+      }
+
+      if (valido) {
+        document.getElementById('spinner').style.display   = 'inline-block';
+        document.querySelector('.btn__text').textContent   = 'Creando cuenta...';
+        document.getElementById('btnRegistro').disabled    = true;
+        this.submit();
+      }
+    });
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,493 @@
+/* registro.css - Página de registro de vecinos (2 pasos)
+   Se carga junto con style.css */
+
+
+/* Body de la página */
+.registro-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--primary);
+}
+
+
+/* Layout: centra el formulario con fondo decorativo */
+.registro-layout {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 100px 24px 60px;
+  position: relative;
+  min-height: calc(100vh - 65px);
+}
+
+
+/* Fondo decorativo fijo */
+.registro__bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.registro__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(232, 93, 38, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232, 93, 38, 0.04) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+.registro__circle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+}
+.registro__circle--1 {
+  width: 450px; height: 450px;
+  background: radial-gradient(circle, rgba(232, 93, 38, 0.10) 0%, transparent 70%);
+  top: -100px; right: -80px;
+}
+.registro__circle--2 {
+  width: 350px; height: 350px;
+  background: radial-gradient(circle, rgba(76, 184, 196, 0.07) 0%, transparent 70%);
+  bottom: -60px; left: -60px;
+}
+
+
+/* Contenedor del formulario */
+.registro__wrap {
+  width: 100%;
+  max-width: 620px;
+  position: relative;
+  z-index: 1;
+  animation: fadeUp 0.7s ease forwards;
+}
+
+.registro__header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.registro__tag {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.registro__title {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: var(--text);
+  margin-bottom: 10px;
+  line-height: 1.1;
+}
+
+.registro__subtitle {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+
+/* Indicador de pasos (1 → 2) */
+.steps-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 36px;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Círculo con el número del paso */
+.step__dot {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.step__label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  white-space: nowrap;
+  transition: var(--transition);
+}
+
+/* Línea que conecta los dos pasos */
+.step__line {
+  flex: 1;
+  height: 2px;
+  background: var(--border);
+  margin: 0 12px;
+  margin-bottom: 22px;
+  max-width: 80px;
+  transition: var(--transition);
+}
+
+/* Paso activo: acento terracota */
+.step--active .step__dot {
+  border-color: var(--accent);
+  background: rgba(232, 93, 38, 0.1);
+  color: var(--accent);
+}
+.step--active .step__label {
+  color: var(--accent);
+}
+
+/* Paso completado: fondo sólido con checkmark */
+.step--done .step__dot {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+  font-size: 0;
+}
+.step--done .step__dot::after {
+  content: '✓';
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+
+/* Formulario base */
+.registro__form {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 36px;
+}
+
+/* Fila de dos columnas */
+.form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form__group {
+  margin-bottom: 20px;
+}
+
+.form__label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.form__hint {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+.form__input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.form__icon {
+  position: absolute;
+  left: 16px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.form__input {
+  width: 100%;
+  padding: 13px 16px 13px 46px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.93rem;
+  transition: var(--transition);
+  outline: none;
+}
+
+.form__input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+  background: rgba(232, 93, 38, 0.04);
+}
+
+.form__input::placeholder {
+  color: rgba(122, 142, 168, 0.45);
+}
+
+/* Espacio a la derecha para el botón del ojo */
+#password,
+#password2 {
+  padding-right: 46px;
+}
+
+/* Botón para mostrar/ocultar contraseña */
+.form__toggle-pass {
+  position: absolute;
+  right: 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  transition: var(--transition);
+}
+.form__toggle-pass:hover {
+  color: var(--accent);
+}
+
+.form__error {
+  display: block;
+  font-size: 0.76rem;
+  color: #FF5A5A;
+  margin-top: 6px;
+  min-height: 16px;
+}
+
+
+/* Indicador de seguridad de la contraseña */
+.password-strength {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.password-strength__bar {
+  flex: 1;
+  height: 4px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Barra de relleno que cambia de color según el nivel */
+.password-strength__fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 4px;
+  transition: width 0.4s ease, background 0.4s ease;
+}
+
+.password-strength__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  min-width: 70px;
+  text-align: right;
+}
+
+
+/* Zona de drag & drop para el comprobante */
+.file-drop {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-sm);
+  padding: 32px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.file-drop:hover,
+.file-drop--hover {
+  border-color: var(--accent);
+  background: rgba(232, 93, 38, 0.04);
+}
+
+.file-drop--active {
+  border-color: var(--accent);
+  border-style: solid;
+  background: rgba(232, 93, 38, 0.06);
+}
+
+.file-drop__icon {
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: center;
+}
+.file-drop--active .file-drop__icon {
+  color: var(--accent);
+}
+
+.file-drop__text {
+  font-size: 0.9rem;
+  color: var(--text);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.file-drop__hint {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.file-drop__name {
+  font-size: 0.82rem;
+  color: var(--accent);
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+
+/* Checkbox personalizado de términos y condiciones */
+.form__group--check {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.form__check-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  user-select: none;
+}
+
+.form__checkbox {
+  display: none;
+}
+
+.form__check-custom {
+  width: 18px; height: 18px;
+  border: 1.5px solid var(--border);
+  border-radius: 5px;
+  background: var(--card-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: var(--transition);
+}
+
+.form__checkbox:checked + .form__check-custom {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.form__checkbox:checked + .form__check-custom::after {
+  content: '';
+  width: 5px;
+  height: 9px;
+  border: 2px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg) translateY(-1px);
+  display: block;
+}
+
+.form__link-inline {
+  color: var(--accent);
+  transition: var(--transition);
+}
+.form__link-inline:hover {
+  color: var(--accent-light);
+}
+
+
+/* Botones del formulario */
+.form__actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn--back {
+  flex-shrink: 0;
+  padding: 15px 24px;
+  font-size: 0.9rem;
+}
+
+.btn--submit {
+  flex: 1;
+  justify-content: center;
+  padding: 15px;
+  font-size: 1rem;
+}
+
+.btn--full {
+  width: 100%;
+  justify-content: center;
+  padding: 15px;
+  font-size: 1rem;
+  margin-top: 4px;
+  margin-bottom: 20px;
+}
+
+.btn__spinner {
+  width: 18px; height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Link para ir al login */
+.registro__login-link {
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+.registro__login-link a {
+  color: var(--accent);
+  font-weight: 500;
+  transition: var(--transition);
+}
+.registro__login-link a:hover {
+  color: var(--accent-light);
+}
+
+
+/* Responsive */
+@media (max-width: 640px) {
+  .registro-layout { padding: 90px 16px 40px; }
+  .form__row       { grid-template-columns: 1fr; }
+  .registro__form  { padding: 24px 20px; }
+  .registro__title { font-size: 1.8rem; }
+
+  /* Ocultar etiquetas de pasos en pantallas muy pequeñas */
+  .step__label     { display: none; }
+  .navbar__hint    { display: none; }
+}

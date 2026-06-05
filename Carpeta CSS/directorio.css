@@ -1,0 +1,505 @@
+/* directorio.css - Directorio de trabajadores
+   Se carga junto con style.css y dashboard.css */
+
+
+/* Barra de búsqueda y filtros */
+.directorio-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.search-wrap {
+  position: relative;
+  max-width: 420px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 11px 16px 11px 44px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  outline: none;
+  transition: var(--transition);
+}
+
+.search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.search-input::placeholder {
+  color: rgba(122, 142, 168, 0.5);
+}
+
+
+/* Botones de filtro por especialidad */
+.filtros {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filtro-btn {
+  padding: 7px 16px;
+  border-radius: 50px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.filtro-btn:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.filtro-btn--active {
+  background: rgba(232, 93, 38, 0.1);
+  border-color: rgba(232, 93, 38, 0.4);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+
+/* Contador de resultados */
+.directorio-count {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.directorio-count strong {
+  color: var(--accent);
+}
+
+
+/* Grid de tarjetas de trabajadores */
+.trabajadores-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.trabajador-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: var(--transition);
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.trabajador-card.animate-in {
+  animation: fadeUp 0.4s ease forwards;
+}
+
+.trabajador-card:hover {
+  border-color: rgba(232, 93, 38, 0.18);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Cabecera de la tarjeta: avatar + badge de disponibilidad */
+.trabajador-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 18px 0;
+}
+
+.trabajador-card__avatar {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+/* Color único por trabajador */
+.trabajador-card__avatar--1 { background: #E85D26; }
+.trabajador-card__avatar--2 { background: #4CB8C4; }
+.trabajador-card__avatar--3 { background: #FFD166; color: #1A1A2E; }
+.trabajador-card__avatar--4 { background: #A78BFA; }
+.trabajador-card__avatar--5 { background: #E85D26; }
+.trabajador-card__avatar--6 { background: #FF5A5A; }
+.trabajador-card__avatar--7 { background: #34D399; color: #1A1A2E; }
+.trabajador-card__avatar--8 { background: #60A5FA; }
+
+/* Badge de disponibilidad */
+.trabajador-card__status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 50px;
+}
+
+.trabajador-card__status--disponible {
+  background: rgba(232, 93, 38, 0.1);
+  color: var(--accent);
+  border: 1px solid rgba(232, 93, 38, 0.25);
+}
+
+.trabajador-card__status--ocupado {
+  background: rgba(255, 90, 90, 0.1);
+  color: #FF5A5A;
+  border: 1px solid rgba(255, 90, 90, 0.25);
+}
+
+/* Punto animado del badge */
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.trabajador-card__status--disponible .status-dot {
+  background: var(--accent);
+  animation: pulse 2s infinite;
+}
+
+.trabajador-card__status--ocupado .status-dot {
+  background: #FF5A5A;
+}
+
+
+/* Cuerpo de la tarjeta */
+.trabajador-card__body {
+  padding: 14px 18px 16px;
+}
+
+.trabajador-card__name {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.trabajador-card__especialidad {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.trabajador-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.trabajador-card__info-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+
+/* Footer de la tarjeta: botones de contacto */
+.trabajador-card__footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--border);
+}
+
+.btn-contactar {
+  padding: 11px 8px;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: var(--transition);
+  text-align: center;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-contactar--tel {
+  background: rgba(232, 93, 38, 0.08);
+  color: var(--accent);
+  border-right: 1px solid var(--border);
+}
+.btn-contactar--tel:hover {
+  background: rgba(232, 93, 38, 0.15);
+}
+
+.btn-contactar--reporte {
+  background: transparent;
+  color: var(--text-muted);
+}
+.btn-contactar--reporte:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--text);
+}
+
+.btn-contactar--reporte:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+
+/* Estado sin resultados */
+.no-resultados {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.no-resultados__emoji {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+}
+
+.no-resultados__text {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.no-resultados__hint {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+
+/* Modal para asignar trabajador a un reporte */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal {
+  background: var(--primary-light);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  max-width: 440px;
+  width: 100%;
+  position: relative;
+  animation: fadeUp 0.3s ease forwards;
+  box-shadow: var(--shadow);
+}
+
+.modal__close {
+  position: absolute;
+  top: 16px; right: 16px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  width: 28px; height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: var(--transition);
+}
+.modal__close:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--text);
+}
+
+.modal__title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 8px;
+  letter-spacing: -0.4px;
+}
+
+.modal__desc {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.modal__desc strong {
+  color: var(--text);
+}
+
+/* Lista de reportes seleccionables en el modal */
+.modal-reportes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.modal-reporte-opt {
+  cursor: pointer;
+}
+
+.modal-reporte-opt input[type="radio"] {
+  display: none;
+}
+
+.modal-reporte-opt__card {
+  padding: 14px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--primary);
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.modal-reporte-opt__card:hover {
+  border-color: rgba(232, 93, 38, 0.18);
+}
+
+.modal-reporte-opt__card p {
+  font-size: 0.88rem;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.modal-reporte-opt__card small {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Reporte seleccionado en el modal */
+.modal-reporte-opt--selected {
+  border-color: var(--accent) !important;
+  background: rgba(232, 93, 38, 0.06) !important;
+}
+
+/* Tags de categoría dentro del modal */
+.modal-reporte-opt__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 50px;
+  width: fit-content;
+  margin-bottom: 4px;
+}
+
+.modal-reporte-opt__tag--agua  { background: var(--agua-glow);  color: var(--agua-color);  border: 1px solid rgba(76, 184, 196, 0.3); }
+.modal-reporte-opt__tag--otros { background: var(--otros-glow); color: var(--otros-color); border: 1px solid rgba(167, 139, 250, 0.3); }
+.modal-reporte-opt__tag--luz   { background: var(--luz-glow);   color: var(--luz-color);   border: 1px solid rgba(255, 209, 102, 0.3); }
+
+.form__error {
+  display: block;
+  font-size: 0.76rem;
+  color: #FF5A5A;
+  margin-bottom: 14px;
+  min-height: 16px;
+}
+
+.modal__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+
+/* Toast de confirmación flotante */
+.toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--primary-light);
+  border: 1px solid rgba(232, 93, 38, 0.4);
+  color: var(--accent);
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 50px;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 300;
+  white-space: nowrap;
+}
+
+.toast--visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+
+/* Responsive */
+@media (max-width: 768px) {
+  .trabajadores-grid { grid-template-columns: repeat(2, 1fr); }
+  .search-wrap       { max-width: 100%; }
+}
+
+@media (max-width: 500px) {
+  .trabajadores-grid { grid-template-columns: 1fr; }
+
+  .filtros    { gap: 6px; }
+  .filtro-btn { font-size: 0.76rem; padding: 6px 12px; }
+
+  .modal { padding: 24px 18px; }
+  .modal__actions { flex-direction: column-reverse; }
+  .modal__actions .btn { width: 100%; justify-content: center; }
+}
+
+
+/* Footer de solo un botón (vista del vecino) */
+
+/* El footer pasa de grid 2 columnas a un solo bloque */
+.trabajador-card__footer--single {
+  grid-template-columns: 1fr;
+}
+
+/* Botón de llamar a ancho completo */
+.btn-contactar--full {
+  width: 100%;
+  border-right: none;
+  border-radius: 0;
+}
+
+/* Estado cuando el trabajador está ocupado: tono apagado */
+.btn-contactar--ocupado {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}

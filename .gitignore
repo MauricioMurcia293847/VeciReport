@@ -1,0 +1,29 @@
+
+#  VeciReport — .gitignore
+
+# --- Credenciales y configuración local ---
+App/config/database.php
+
+# --- .htaccess raíz (configuración local de Apache) ---
+.htaccess
+
+# --- Archivos subidos por los usuarios ---
+uploads/comprobantes/*
+uploads/reportes/*
+
+# Conservar la estructura de carpetas en el repo
+!uploads/comprobantes/.gitkeep
+!uploads/reportes/.gitkeep
+
+# --- Claude Code ---
+.claude/
+
+# --- Herramienta de diagnóstico (nunca commitear) ---
+test_conexion.php
+
+# --- Sistema operativo ---
+Thumbs.db
+.DS_Store
+
+# --- Logs ---
+*.log

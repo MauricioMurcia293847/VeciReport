@@ -1,0 +1,481 @@
+/* admin-reportes.css - Estilos compartidos para las subpáginas del admin
+   (admin-reportes, admin-vecinos, admin-bitacora)
+   Se carga junto con style.css, dashboard.css y admin.css */
+
+
+/* Filtros reutilizados en las páginas del admin */
+.mr-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.mr-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 50px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.mr-filter:hover { border-color: var(--accent); color: var(--text); }
+
+.mr-filter--active {
+  background: rgba(232,93,38,0.1);
+  border-color: rgba(232,93,38,0.4);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.mr-filter__count {
+  background: rgba(0,0,0,0.06);
+  padding: 1px 7px;
+  border-radius: 50px;
+  font-size: 0.72rem;
+}
+.mr-filter--active .mr-filter__count { background: rgba(232,93,38,0.2); }
+
+
+/* Buscador reutilizado */
+.mr-search { position: relative; min-width: 220px; }
+
+.mr-search__icon {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  display: flex;
+  pointer-events: none;
+}
+
+.mr-search__input {
+  width: 100%;
+  padding: 9px 14px 9px 38px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  outline: none;
+  transition: var(--transition);
+  -webkit-appearance: none;
+  appearance: none;
+}
+.mr-search__input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.mr-search__input::placeholder {
+  color: rgba(122, 142, 168, 0.6);
+}
+
+
+/* Contador de resultados */
+.dir-count { font-size: 0.82rem; color: var(--text-muted); }
+.dir-count strong { color: var(--text); }
+
+
+/* Estado vacío */
+.dir-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 60px 20px;
+  text-align: center;
+}
+.dir-empty__icon { font-size: 2.5rem; }
+.dir-empty__text { font-size: 0.95rem; color: var(--text-muted); }
+
+
+/* Barra de toolbar */
+.ar-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.ar-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Select de categoría */
+.ar-select {
+  padding: 9px 14px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  cursor: pointer;
+  outline: none;
+  transition: var(--transition);
+  -webkit-appearance: none;
+  appearance: none;
+}
+.ar-select:focus { border-color: var(--accent); }
+
+/* Celdas especiales de la tabla */
+.ar-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ar-fecha { font-size: 0.78rem; color: var(--text-muted); white-space: nowrap; }
+
+
+/* Grid de tarjetas de vecinos */
+.vecinos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.vecino-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: var(--transition);
+  animation: fadeUp 0.4s ease forwards;
+}
+.vecino-card:hover {
+  border-color: rgba(232, 93, 38, 0.18);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.1);
+}
+
+.vecino-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vecino-card__avatar {
+  width: 50px; height: 50px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+.vecino-card__avatar--purple { background: var(--otros-color); }
+.vecino-card__avatar--blue   { background: var(--agua-color); }
+.vecino-card__avatar--yellow { background: var(--luz-color); color: var(--primary); }
+.vecino-card__avatar--orange { background: var(--trabajadores-color); }
+
+.vecino-card__badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 50px;
+  background: var(--primary);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+.vecino-card__badge--activo {
+  background: rgba(232,93,38,0.1);
+  color: var(--accent);
+  border-color: rgba(232,93,38,0.25);
+}
+.vecino-card__badge--nuevo {
+  background: rgba(167,139,250,0.1);
+  color: var(--otros-color);
+  border-color: rgba(167,139,250,0.25);
+}
+
+.vecino-card__name {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 5px;
+}
+.vecino-card__meta { font-size: 0.78rem; color: var(--text-muted); line-height: 1.6; }
+
+.vecino-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.vecino-card__stat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* Botón pequeño reutilizado */
+.worker-card-dir__btn {
+  padding: 6px 14px;
+  border-radius: 50px;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.worker-card-dir__btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(232,93,38,0.06);
+}
+
+
+/* Bitácora: lista de eventos del sistema */
+.bitacora-list { display: flex; flex-direction: column; }
+
+.bit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 12px;
+  border-bottom: 1px solid var(--border);
+  transition: var(--transition);
+}
+.bit-item:last-child { border-bottom: none; }
+.bit-item:hover { background: rgba(0,0,0,0.02); }
+
+.bit-item__icon {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+.bit-item__icon--blue   { background: var(--agua-glow);       color: var(--agua-color);  border: 1px solid rgba(76,184,196,0.2); }
+.bit-item__icon--green  { background: rgba(232,93,38,0.1);    color: var(--accent);      border: 1px solid rgba(232,93,38,0.2); }
+.bit-item__icon--purple { background: rgba(167,139,250,0.1);  color: var(--otros-color); border: 1px solid rgba(167,139,250,0.2); }
+.bit-item__icon--yellow { background: rgba(255,209,102,0.1);  color: var(--luz-color);   border: 1px solid rgba(255,209,102,0.2); }
+
+.bit-item__content { flex: 1; }
+.bit-item__texto { font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 4px; }
+.bit-item__texto strong { color: var(--text); }
+.bit-item__meta { font-size: 0.74rem; color: var(--text-muted); opacity: 0.7; }
+
+.bit-item__badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.bit-item__badge--reporte    { background: var(--agua-glow);     color: var(--agua-color);  border: 1px solid rgba(76,184,196,0.2); }
+.bit-item__badge--asignacion { background: rgba(232,93,38,0.1);  color: var(--accent);      border: 1px solid rgba(232,93,38,0.2); }
+.bit-item__badge--usuario    { background: rgba(167,139,250,0.1);color: var(--otros-color); border: 1px solid rgba(167,139,250,0.2); }
+.bit-item__badge--sistema    { background: rgba(255,209,102,0.1);color: var(--luz-color);   border: 1px solid rgba(255,209,102,0.2); }
+
+
+/* Responsive */
+@media (max-width: 992px) { .dashboard-main { margin-left: 0; } }
+@media (max-width: 768px) {
+  .ar-toolbar     { flex-direction: column; align-items: flex-start; }
+  .ar-search-wrap { width: 100%; flex-direction: column; }
+  .ar-select      { width: 100%; border-radius: var(--radius-sm); }
+  .mr-search      { width: 100%; }
+  .vecinos-grid   { grid-template-columns: 1fr; }
+  .mr-filter      { font-size: 0.76rem; padding: 6px 12px; }
+}
+@media (max-width: 480px) {
+  .mr-filter { font-size: 0.72rem; padding: 5px 10px; }
+}
+
+
+/* Cards de reportes (reemplazan la tabla anterior) */
+
+/* Grid responsivo: 2 columnas en desktop, 1 en móvil */
+.ar-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+/* Card individual de un reporte */
+.ar-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: var(--transition);
+  animation: fadeUp 0.4s ease forwards;
+}
+
+.ar-card:hover {
+  border-color: rgba(232, 93, 38, 0.18);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Card atendida: ligeramente apagada */
+.ar-card--atendido {
+  opacity: 0.7;
+}
+.ar-card--atendido:hover {
+  opacity: 1;
+}
+
+/* Cabecera de la card: ID + badges + estado */
+.ar-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Grupo izquierdo: ID, categoría y tipo */
+.ar-card__left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Badge del ID del reporte */
+.ar-card__id {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: var(--primary);
+  border: 1px solid var(--border);
+  padding: 2px 10px;
+  border-radius: 50px;
+  font-family: monospace;
+  white-space: nowrap;
+}
+
+/* Descripción del problema */
+.ar-card__desc {
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* Fila de vecino + fecha */
+.ar-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* Chip del vecino: avatar + nombre */
+.ar-card__vecino {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.83rem;
+  color: var(--text);
+}
+
+.ar-card__fecha {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* Chip del trabajador asignado */
+.ar-card__worker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  padding: 8px 12px;
+  background: rgba(232, 93, 38, 0.05);
+  border: 1px solid rgba(232, 93, 38, 0.15);
+  border-radius: var(--radius-sm);
+}
+
+/* Sección para asignar trabajador cuando no hay uno asignado */
+.ar-card__assign {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ar-card__assign-label {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+/* El dropdown de asignación ocupa todo el ancho de la card */
+.ar-card__assign .admin-table__assign {
+  width: 100%;
+  max-width: 100%;
+  padding: 9px 12px;
+  font-size: 0.85rem;
+}
+
+/* Botón de acción al fondo de la card */
+.ar-card__actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 4px;
+  border-top: 1px solid var(--border);
+}
+
+.ar-card__actions .admin-btn--resolve {
+  padding: 8px 16px;
+  font-size: 0.82rem;
+}
+
+
+/* Responsive */
+@media (max-width: 900px) {
+  /* Una sola columna en tablet */
+  .ar-cards-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .ar-card__header { flex-direction: column; align-items: flex-start; }
+}
+
+
+/* Variante compacta del grid de cards para el resumen del admin
+   (dentro de admin.html donde ya hay una columna derecha de trabajadores) */
+.ar-cards-grid--compact {
+  grid-template-columns: 1fr;
+}
