@@ -1,0 +1,28 @@
+# =============================================================
+#  VeciReport — .gitattributes
+#  Configuración de GitHub Linguist
+#  Lenguaje principal: PHP
+# =============================================================
+
+# --- Backend: PHP ---
+*.php linguist-detectable=true
+
+# --- Estilos: CSS ---
+*.css linguist-detectable=true
+
+# --- Scripts: JavaScript ---
+*.js  linguist-detectable=true
+
+# --- Páginas estáticas: HTML ---
+*.html linguist-detectable=true
+
+# --- Base de datos: SQL ---
+*.sql linguist-detectable=true
+
+# --- backup/ — versiones HTML de referencia, no código activo ---
+# Sin esta línea, los ~10 archivos HTML del backup compiten con PHP
+# en las estadísticas y pueden desplazarlo como lenguaje principal.
+backup/ linguist-documentation=true
+
+# --- Archivos de estructura de carpetas ---
+*.gitkeep linguist-detectable=false
