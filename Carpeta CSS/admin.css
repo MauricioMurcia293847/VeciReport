@@ -20,8 +20,8 @@
 }
 
 /* En páginas del admin el sidebar es 20px más ancho */
-.admin-page .sidebar       { width: 270px; }
-.admin-page .dashboard-main{ margin-left: 270px; }
+.admin-page .sidebar       { width: 270px; max-width: min(86vw, 270px); }
+.admin-page .dashboard-main{ margin-left: 270px; width: calc(100% - 270px); }
 
 /* Avatar del guardia en sidebar y topbar */
 .sidebar__user-avatar--admin { background: var(--otros-color); color: #fff; }
@@ -30,7 +30,7 @@
 
 /* KPI grid del admin — 3 columnas en desktop (6 cards) */
 .kpi-grid--admin {
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   margin-bottom: 28px;
 }
 
@@ -65,7 +65,7 @@
 /* Grid principal del admin: tabla + columna derecha */
 .admin-grid {
   display: grid;
-  grid-template-columns: 1fr 300px;
+  grid-template-columns: minmax(0, 1fr) 300px;
   gap: 20px;
   align-items: start;
 }
@@ -519,17 +519,20 @@
 
 
 /* Responsive */
-@media (max-width: 1200px) { .kpi-grid--admin { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 1200px) { .kpi-grid--admin { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 1024px) {
   .admin-grid { grid-template-columns: 1fr; }
   .admin-right { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 }
 @media (max-width: 768px) {
-  .kpi-grid--admin { grid-template-columns: repeat(2, 1fr); }
+  .kpi-grid--admin { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .admin-right { grid-template-columns: 1fr; }
 }
 @media (max-width: 480px) {
-  .kpi-grid--admin { grid-template-columns: 1fr 1fr; }
+  .kpi-grid--admin { grid-template-columns: 1fr; }
+  .admin-page .topbar__title h1 { font-size: 1.08rem; }
+  .admin-page .kpi-card { align-items: flex-start; padding: 16px; }
+  .admin-page .kpi-card__trend { font-size: 0.76rem; }
   .modal--admin-det { padding: 22px 16px; }
   .modal-det__admin-actions { flex-direction: column; }
   .modal-det__admin-actions .btn,
@@ -538,7 +541,7 @@
 }
 
 @media (max-width: 992px) {
-  .admin-page .dashboard-main { margin-left: 0; }
+  .admin-page .dashboard-main { margin-left: 0; width: 100%; }
   .admin-page .sidebar        { transform: translateX(-100%); }
   .admin-page .sidebar--open  { transform: translateX(0); }
 }
