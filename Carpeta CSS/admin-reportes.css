@@ -427,11 +427,17 @@
   min-width: 0;
 }
 
+.ar-card__vecino span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .ar-card__fecha {
   font-size: 0.75rem;
   color: var(--text-muted);
   overflow-wrap: anywhere;
   text-align: right;
+  min-width: 0;
 }
 
 /* Chip del trabajador asignado */
@@ -480,6 +486,10 @@
   border-top: 1px solid var(--border);
 }
 
+.ar-card__actions form {
+  margin: 0;
+}
+
 .ar-card__actions .admin-btn--resolve {
   padding: 8px 16px;
   font-size: 0.82rem;
@@ -497,20 +507,29 @@
   .ar-card {
     padding: 18px;
     gap: 13px;
+    width: 100%;
+    max-width: 100%;
   }
   .ar-card__meta {
+    display: grid;
+    grid-template-columns: 1fr;
     align-items: flex-start;
-    flex-direction: column;
     gap: 8px;
+    width: 100%;
   }
   .ar-card__fecha {
     text-align: left;
+    width: 100%;
   }
   .ar-card__worker {
     align-items: flex-start;
+    width: 100%;
   }
   .ar-card__actions {
     justify-content: stretch;
+  }
+  .ar-card__actions form {
+    width: 100%;
   }
   .ar-card__actions .admin-btn--resolve {
     width: 100%;
@@ -525,4 +544,22 @@
    (dentro de admin.php donde ya hay una columna derecha de trabajadores) */
 .ar-cards-grid--compact {
   grid-template-columns: 1fr;
+}
+
+@media (max-width: 720px) {
+  .ar-cards-grid--compact .ar-card__meta {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .ar-cards-grid--compact .ar-card__fecha {
+    text-align: left;
+    width: 100%;
+  }
+  .ar-cards-grid--compact .ar-card__actions,
+  .ar-cards-grid--compact .ar-card__actions form,
+  .ar-cards-grid--compact .ar-card__actions .admin-btn--resolve {
+    width: 100%;
+  }
 }
