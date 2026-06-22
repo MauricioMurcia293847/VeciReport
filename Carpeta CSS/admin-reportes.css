@@ -283,10 +283,10 @@
 .bit-item__icon--purple { background: rgba(167,139,250,0.1);  color: var(--otros-color); border: 1px solid rgba(167,139,250,0.2); }
 .bit-item__icon--yellow { background: rgba(255,209,102,0.1);  color: var(--luz-color);   border: 1px solid rgba(255,209,102,0.2); }
 
-.bit-item__content { flex: 1; }
-.bit-item__texto { font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 4px; }
+.bit-item__content { flex: 1; min-width: 0; }
+.bit-item__texto { font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 4px; overflow-wrap: anywhere; }
 .bit-item__texto strong { color: var(--text); }
-.bit-item__meta { font-size: 0.74rem; color: var(--text-muted); opacity: 0.7; }
+.bit-item__meta { font-size: 0.74rem; color: var(--text-muted); opacity: 0.7; overflow-wrap: anywhere; }
 
 .bit-item__badge {
   font-size: 0.68rem;
@@ -316,6 +316,21 @@
 }
 @media (max-width: 480px) {
   .mr-filter { font-size: 0.72rem; padding: 5px 10px; }
+  .bit-item {
+    gap: 10px;
+    padding: 16px 0;
+  }
+  .bit-item__icon {
+    width: 34px;
+    height: 34px;
+  }
+  .bit-item__badge {
+    align-self: flex-start;
+    font-size: 0.62rem;
+    padding: 3px 8px;
+    max-width: 96px;
+    text-align: center;
+  }
 }
 
 
@@ -324,7 +339,7 @@
 /* Grid responsivo: 2 columnas en desktop, 1 en móvil */
 .ar-cards-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
 }
 
@@ -337,6 +352,7 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+  min-width: 0;
   transition: var(--transition);
   animation: fadeUp 0.4s ease forwards;
 }
@@ -369,6 +385,7 @@
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
+  min-width: 0;
 }
 
 /* Badge del ID del reporte */
@@ -388,6 +405,7 @@
   font-size: 0.88rem;
   color: var(--text);
   line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 /* Fila de vecino + fecha */
@@ -396,6 +414,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+  min-width: 0;
 }
 
 /* Chip del vecino: avatar + nombre */
@@ -405,12 +424,14 @@
   gap: 8px;
   font-size: 0.83rem;
   color: var(--text);
+  min-width: 0;
 }
 
 .ar-card__fecha {
   font-size: 0.75rem;
   color: var(--text-muted);
-  white-space: nowrap;
+  overflow-wrap: anywhere;
+  text-align: right;
 }
 
 /* Chip del trabajador asignado */
@@ -424,6 +445,8 @@
   background: rgba(232, 93, 38, 0.05);
   border: 1px solid rgba(232, 93, 38, 0.15);
   border-radius: var(--radius-sm);
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 /* Sección para asignar trabajador cuando no hay uno asignado */
@@ -471,6 +494,30 @@
 
 @media (max-width: 600px) {
   .ar-card__header { flex-direction: column; align-items: flex-start; }
+  .ar-card {
+    padding: 18px;
+    gap: 13px;
+  }
+  .ar-card__meta {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .ar-card__fecha {
+    text-align: left;
+  }
+  .ar-card__worker {
+    align-items: flex-start;
+  }
+  .ar-card__actions {
+    justify-content: stretch;
+  }
+  .ar-card__actions .admin-btn--resolve {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    white-space: normal;
+  }
 }
 
 

@@ -173,14 +173,14 @@ VALUES (
 
 INSERT INTO trabajadores (nombre, apellidos, especialidad, telefono, disponibilidad)
 VALUES
-    ('Carlos',    'RamÃ­rez Ortiz',     'electricista', '656-100-2201', 'disponible'),
+    ('Carlos',    'Ramirez Ortiz',     'electricista', '656-100-2201', 'disponible'),
     ('Miguel',    'Flores Herrera',    'electricista', '656-100-2202', 'disponible'),
     ('Arturo',    'Mendoza Soto',      'plomero',      '656-100-2203', 'disponible'),
     ('Roberto',   'Vargas Castillo',   'plomero',      '656-100-2204', 'disponible'),
-    ('Francisco', 'Torres JimÃ©nez',    'albanil',      '656-100-2205', 'disponible'),
+    ('Francisco', 'Torres Jimenez',    'albanil',      '656-100-2205', 'disponible'),
     ('Ernesto',   'Luna Espinoza',     'jardinero',    '656-100-2206', 'disponible'),
-    ('HÃ©ctor',    'GutiÃ©rrez Ramos',   'general',      '656-100-2207', 'disponible'),
-    ('JosÃ©',      'Morales Cervantes', 'general',      '656-100-2208', 'disponible');
+    ('Hector',    'Gutierrez Ramos',   'general',      '656-100-2207', 'disponible'),
+    ('Jose',      'Morales Cervantes', 'general',      '656-100-2208', 'disponible');
 
 
 INSERT INTO usuarios (nombre, apellidos, correo, password_hash, rol, estado)
