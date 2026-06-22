@@ -2,6 +2,19 @@
 
 Esta guia resume los pasos para subir VeciReport a un hosting con PHP, MySQL y Apache/cPanel.
 
+## Recomendacion Para Demo Gratuita
+
+Para el demo de portafolio se recomienda usar InfinityFree porque permite PHP, MySQL, phpMyAdmin, `.htaccess` y subdominio gratuito sin anuncios insertados. Es suficiente para mostrar VeciReport a reclutadores o contactos de LinkedIn.
+
+En InfinityFree la base de datos se crea desde el panel y normalmente tendra un nombre propio del hosting. Por eso, para importar en phpMyAdmin usa los archivos preparados para hosting:
+
+```text
+database/hosting_schema.sql
+database/demo_seed_hosting.sql
+```
+
+Estos archivos no incluyen `CREATE DATABASE` ni `USE vecireport`, asi que se importan directamente dentro de la base de datos seleccionada en phpMyAdmin.
+
 ## Requisitos
 
 - PHP 8.1 o superior.
@@ -59,7 +72,14 @@ define('APP_BASE_URL', '/VeciReport');
 
 1. Crear una base de datos en el panel del hosting.
 2. Crear un usuario MySQL con permisos sobre esa base.
-3. Importar:
+3. En phpMyAdmin, seleccionar la base de datos creada por el hosting.
+4. Para InfinityFree u otro hosting compartido, importar:
+
+```text
+database/hosting_schema.sql
+```
+
+Para XAMPP/local tambien puedes usar:
 
 ```text
 database/vecireport.sql
@@ -76,12 +96,18 @@ database/migrations/2026_06_21_leaflet_coords.sql
 Para demo publica, ejecutar tambien:
 
 ```text
+database/demo_seed_hosting.sql
+```
+
+En XAMPP/local tambien puedes usar:
+
+```text
 database/demo_seed.sql
 ```
 
-4. Ajustar `App/config/database.php` con las credenciales reales del hosting.
-5. Configurar `App/config/app.php` segun `docs/demo.md` si sera una demo publica.
-6. Cambiar la contrasena inicial del admin despues del primer acceso si no sera demo.
+5. Ajustar `App/config/database.php` con las credenciales reales del hosting.
+6. Configurar `App/config/app.php` segun `docs/demo.md` si sera una demo publica.
+7. Cambiar la contrasena inicial del admin despues del primer acceso si no sera demo.
 
 ## Archivos A Subir
 
