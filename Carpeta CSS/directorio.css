@@ -270,6 +270,49 @@
   cursor: not-allowed;
 }
 
+.trabajador-card__footer--admin {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.trabajador-card__footer--admin .btn-contactar--tel,
+.trabajador-card__footer--admin .btn-contactar--reporte {
+  border-bottom: 1px solid var(--border);
+}
+
+.btn-contactar--edit {
+  background: rgba(76, 184, 196, 0.08);
+  color: var(--agua-color);
+  border-right: 1px solid var(--border);
+}
+
+.btn-contactar--edit:hover {
+  background: rgba(76, 184, 196, 0.15);
+}
+
+.worker-admin__availability-form {
+  margin: 0;
+  display: flex;
+}
+
+.worker-admin__availability-form .btn-contactar {
+  width: 100%;
+}
+
+.btn-contactar--status {
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.btn-contactar--status:hover {
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--text);
+}
+
+.worker-admin__new {
+  width: fit-content;
+  white-space: nowrap;
+}
+
 
 /* Estado sin resultados */
 .no-resultados {
@@ -438,6 +481,49 @@
   justify-content: flex-end;
 }
 
+.modal--worker {
+  max-width: 560px;
+}
+
+.worker-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.worker-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.worker-form__field:first-child,
+.worker-form__field:nth-child(2) {
+  grid-column: span 1;
+}
+
+.worker-form__input {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  outline: none;
+  transition: var(--transition);
+}
+
+.worker-form__input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
 
 /* Toast de confirmación flotante */
 .toast {
@@ -478,6 +564,7 @@
   .filtro-btn { font-size: 0.76rem; padding: 6px 12px; }
 
   .modal { padding: 24px 18px; }
+  .worker-form { grid-template-columns: 1fr; }
   .modal__actions { flex-direction: column-reverse; }
   .modal__actions .btn { width: 100%; justify-content: center; }
 }

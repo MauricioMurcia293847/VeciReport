@@ -311,6 +311,23 @@
 }
 
 
+/* Mapa real para seleccionar ubicacion dentro del fraccionamiento */
+.registro-map {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  cursor: crosshair;
+  background: var(--card-bg);
+}
+
+.registro-map .leaflet-control-attribution {
+  font-size: 0.65rem;
+}
+
+
 /* Zona de drag & drop para el comprobante */
 .file-drop {
   border: 2px dashed var(--border);

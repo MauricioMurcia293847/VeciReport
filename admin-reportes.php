@@ -33,12 +33,14 @@ $stmt = $pdo->query("
         r.id, r.categoria, r.tipo, r.descripcion, r.estado, r.created_at,
         u.nombre  AS v_nombre,
         u.apellidos AS v_apellidos,
+        f.nombre AS fraccionamiento,
         t.id      AS t_id,
         t.nombre  AS t_nombre,
         t.apellidos AS t_apellidos,
         t.especialidad
     FROM reportes r
     JOIN  vecinos   v ON r.vecino_id    = v.id
+    JOIN  fraccionamientos f ON f.id = v.fraccionamiento_id
     JOIN  usuarios  u ON v.usuario_id   = u.id
     LEFT JOIN trabajadores t ON r.trabajador_id = t.id
     ORDER BY
@@ -120,6 +122,9 @@ $error = $_GET['error'] ?? '';
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         <span>Vecinos</span>
       </a>
+      <a href="admin-fraccionamientos.php" class="sidebar__link">
+        <span>Fraccionamientos</span>
+      </a>
       <a href="directorio-admin.php" class="sidebar__link">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         <span>Trabajadores</span>
@@ -129,10 +134,7 @@ $error = $_GET['error'] ?? '';
         <span>Bitácora</span>
       </a>
       <p class="sidebar__section-label">Cuenta</p>
-      <a href="App/controllers/UsuarioController.php?accion=logout" class="sidebar__link sidebar__link--logout">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        <span>Cerrar sesión</span>
-      </a>
+      <?= formularioLogout() ?>
     </nav>
 
     <div class="sidebar__user">
@@ -206,7 +208,7 @@ $error = $_GET['error'] ?? '';
           $v_nom     = htmlspecialchars($r['v_nombre'] . ' ' . $r['v_apellidos']);
           $v_ini     = strtoupper(substr($r['v_nombre'], 0, 1) . substr($r['v_apellidos'], 0, 1));
           $atendido  = $r['estado'] === 'atendido';
-          $data_txt  = strtolower("{$r['v_nombre']} {$r['v_apellidos']} {$r['descripcion']} {$r['categoria']}");
+          $data_txt  = strtolower("{$r['v_nombre']} {$r['v_apellidos']} {$r['fraccionamiento']} {$r['descripcion']} {$r['categoria']}");
         ?>
         <div class="ar-card <?= $atendido ? 'ar-card--atendido' : '' ?>"
              data-status="<?= $ecfg['data'] ?>"
@@ -229,6 +231,7 @@ $error = $_GET['error'] ?? '';
               <div class="admin-table__avatar"><?= $v_ini ?></div>
               <span><?= $v_nom ?></span>
             </div>
+            <span class="ar-card__fecha"><?= htmlspecialchars($r['fraccionamiento']) ?></span>
             <span class="ar-card__fecha"><?= tiempoRelativo($r['created_at']) ?></span>
           </div>
 

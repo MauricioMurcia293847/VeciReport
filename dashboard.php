@@ -16,11 +16,17 @@ $apellidos = $_SESSION['apellidos'];
 $iniciales = strtoupper(substr($nombre, 0, 1) . substr($apellidos, 0, 1));
 
 // Datos del domicilio del vecino
-$stmt = $pdo->prepare("SELECT num_casa, color_casa FROM vecinos WHERE usuario_id = ?");
+$stmt = $pdo->prepare("
+    SELECT v.num_casa, v.color_casa, f.nombre AS fraccionamiento
+    FROM vecinos v
+    JOIN fraccionamientos f ON f.id = v.fraccionamiento_id
+    WHERE v.usuario_id = ?
+");
 $stmt->execute([$usuario_id]);
 $vecino = $stmt->fetch();
 $num_casa   = $vecino['num_casa']   ?? '—';
 $color_casa = $vecino['color_casa'] ?? '—';
+$fraccionamiento = $vecino['fraccionamiento'] ?? 'Fraccionamiento';
 
 // KPIs: conteo de reportes del vecino
 $stmt = $pdo->prepare("
@@ -180,14 +186,7 @@ function tiempoRelativo(string $fecha): string {
         <span>Mi perfil</span>
       </a>
 
-      <a href="App/controllers/UsuarioController.php?accion=logout" class="sidebar__link sidebar__link--logout">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-          <polyline points="16 17 21 12 16 7"/>
-          <line x1="21" y1="12" x2="9" y2="12"/>
-        </svg>
-        <span>Cerrar sesión</span>
-      </a>
+      <?= formularioLogout() ?>
     </nav>
 
     <!-- Datos reales del vecino en sesión -->
@@ -195,7 +194,7 @@ function tiempoRelativo(string $fecha): string {
       <div class="sidebar__user-avatar"><?= htmlspecialchars($iniciales) ?></div>
       <div class="sidebar__user-info">
         <p class="sidebar__user-name"><?= htmlspecialchars($nombre . ' ' . $apellidos) ?></p>
-        <p class="sidebar__user-role">Vecino · Casa #<?= htmlspecialchars($num_casa) ?></p>
+        <p class="sidebar__user-role"><?= htmlspecialchars($fraccionamiento) ?> · Casa #<?= htmlspecialchars($num_casa) ?></p>
       </div>
     </div>
   </aside>
@@ -414,11 +413,6 @@ function tiempoRelativo(string $fecha): string {
 
   <script src="Carpeta JS/funciones.js"></script>
   <script>
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('sidebar--open');
-      document.getElementById('sidebarOverlay').classList.toggle('overlay--visible');
-    }
-
     function toggleNotifs() {
       document.getElementById('notifPanel').classList.toggle('notif-panel--open');
     }

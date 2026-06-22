@@ -25,12 +25,16 @@ $stmt = $pdo->query("
         u.created_at,
         v.num_casa,
         v.color_casa,
+        v.ubicacion_lat,
+        v.ubicacion_lng,
+        f.nombre AS fraccionamiento,
         COUNT(r.id) AS total_reportes
     FROM usuarios u
     JOIN  vecinos  v ON v.usuario_id = u.id
+    JOIN  fraccionamientos f ON f.id = v.fraccionamiento_id
     LEFT JOIN reportes r ON r.vecino_id = v.id
     WHERE u.rol = 'vecino'
-    GROUP BY u.id, u.nombre, u.apellidos, u.correo, u.estado, u.created_at, v.num_casa, v.color_casa
+    GROUP BY u.id, u.nombre, u.apellidos, u.correo, u.estado, u.created_at, v.num_casa, v.color_casa, v.ubicacion_lat, v.ubicacion_lng, f.nombre
     ORDER BY u.created_at DESC
 ");
 $vecinos       = $stmt->fetchAll();
@@ -103,6 +107,9 @@ $error = $_GET['error'] ?? '';
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         <span>Vecinos</span>
       </a>
+      <a href="admin-fraccionamientos.php" class="sidebar__link">
+        <span>Fraccionamientos</span>
+      </a>
       <a href="directorio-admin.php" class="sidebar__link">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         <span>Trabajadores</span>
@@ -112,10 +119,7 @@ $error = $_GET['error'] ?? '';
         <span>Bitácora</span>
       </a>
       <p class="sidebar__section-label">Cuenta</p>
-      <a href="App/controllers/UsuarioController.php?accion=logout" class="sidebar__link sidebar__link--logout">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        <span>Cerrar sesión</span>
-      </a>
+      <?= formularioLogout() ?>
     </nav>
 
     <div class="sidebar__user">
@@ -166,6 +170,7 @@ $error = $_GET['error'] ?? '';
         ?>
         <div class="vecino-card"
              data-nombre="<?= htmlspecialchars(strtolower($v['nombre'] . ' ' . $v['apellidos'])) ?>"
+             data-fraccionamiento="<?= htmlspecialchars(strtolower($v['fraccionamiento'])) ?>"
              data-casa="<?= htmlspecialchars($v['num_casa']) ?>">
 
           <div class="vecino-card__top">
@@ -175,7 +180,11 @@ $error = $_GET['error'] ?? '';
 
           <div class="vecino-card__info">
             <h3 class="vecino-card__name"><?= htmlspecialchars($v['nombre'] . ' ' . $v['apellidos']) ?></h3>
-            <p class="vecino-card__meta">Casa #<?= htmlspecialchars($v['num_casa']) ?> · Color: <?= htmlspecialchars(ucfirst($v['color_casa'])) ?></p>
+            <p class="vecino-card__meta"><?= htmlspecialchars($v['fraccionamiento']) ?> · Casa #<?= htmlspecialchars($v['num_casa']) ?></p>
+            <p class="vecino-card__meta">Color: <?= htmlspecialchars(ucfirst($v['color_casa'])) ?></p>
+            <?php if ($v['ubicacion_lat'] !== null && $v['ubicacion_lng'] !== null): ?>
+              <p class="vecino-card__meta">Mapa: <?= number_format((float) $v['ubicacion_lat'], 7) ?>, <?= number_format((float) $v['ubicacion_lng'], 7) ?></p>
+            <?php endif; ?>
             <p class="vecino-card__meta"><?= $reps ?> reporte<?= $reps !== 1 ? 's' : '' ?> · Registrado <?= tiempoRelativo($v['created_at']) ?></p>
           </div>
 
@@ -238,7 +247,7 @@ $error = $_GET['error'] ?? '';
       let visibles = 0;
 
       cards.forEach(card => {
-        const match = !texto || card.dataset.nombre.includes(texto) || card.dataset.casa.includes(texto);
+        const match = !texto || card.dataset.nombre.includes(texto) || card.dataset.casa.includes(texto) || card.dataset.fraccionamiento.includes(texto);
         card.style.display = match ? '' : 'none';
         if (match) visibles++;
       });
@@ -251,6 +260,8 @@ $error = $_GET['error'] ?? '';
       mostrarToast('Vecino aprobado correctamente ✓', 'success');
     <?php elseif ($ok === 'bloqueado'): ?>
       mostrarToast('Vecino bloqueado.', 'success');
+    <?php elseif ($error === 'demo'): ?>
+      mostrarToast('Esta cuenta demo esta protegida para mantener estable la demo publica.', 'error');
     <?php elseif ($error): ?>
       mostrarToast('Ocurrió un error. Intenta de nuevo.', 'error');
     <?php endif; ?>

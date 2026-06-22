@@ -38,8 +38,7 @@ function conectar(): PDO {
             // Aquí lo mostramos solo durante el desarrollo
             http_response_code(500);
             die(json_encode([
-                'error' => 'No se pudo conectar a la base de datos.',
-                'detalle' => $e->getMessage() // Quitar esta línea en producción
+                'error' => 'No se pudo conectar a la base de datos.'
             ]));
         }
     }

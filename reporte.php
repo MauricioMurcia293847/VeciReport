@@ -37,6 +37,7 @@ $errores_msg = [
     'descripcion_corta'     => 'La descripción debe tener al menos 10 caracteres.',
     'campos_vacios'         => 'Todos los campos son obligatorios.',
     'vecino_no_encontrado'  => 'No se encontró tu perfil de vecino.',
+    'foto_invalida'         => 'La foto debe ser JPG o PNG y pesar máximo 5 MB.',
     'error_servidor'        => 'Ocurrió un error. Inténtalo de nuevo.',
 ];
 ?>
@@ -124,14 +125,7 @@ $errores_msg = [
         <span>Mi perfil</span>
       </a>
 
-      <a href="App/controllers/UsuarioController.php?accion=logout" class="sidebar__link sidebar__link--logout">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-          <polyline points="16 17 21 12 16 7"/>
-          <line x1="21" y1="12" x2="9" y2="12"/>
-        </svg>
-        <span>Cerrar sesión</span>
-      </a>
+      <?= formularioLogout() ?>
     </nav>
 
     <div class="sidebar__user">
@@ -498,11 +492,6 @@ $errores_msg = [
         radio.closest('.cat-option').classList.add('cat-option--selected');
         actualizarPreview();
       }
-    }
-
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('sidebar--open');
-      document.getElementById('sidebarOverlay').classList.toggle('overlay--visible');
     }
 
     document.querySelectorAll('input[name="categoria"]').forEach(radio => {

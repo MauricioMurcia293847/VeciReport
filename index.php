@@ -29,8 +29,8 @@
     </div>
 
     <div class="navbar__actions">
-      <a href="login.html" class="btn btn--ghost">Iniciar sesión</a>
-      <a href="registro.html" class="btn btn--primary">Comenzar gratis</a>
+      <a href="login.php" class="btn btn--ghost">Iniciar sesión</a>
+      <a href="registro.php" class="btn btn--primary">Comenzar gratis</a>
     </div>
 
     <button class="navbar__toggle" onclick="toggleMenu()" aria-label="Menú">
@@ -41,8 +41,8 @@
   </nav>
 
   <div class="mobile-menu" id="mobileMenu">
-    <a href="login.html">Iniciar sesión</a>
-    <a href="registro.html">Comenzar gratis</a>
+    <a href="login.php">Iniciar sesión</a>
+    <a href="registro.php">Comenzar gratis</a>
   </div>
 
 
@@ -77,7 +77,7 @@
       </p>
 
       <div class="hero__cta">
-        <a href="registro.html" class="btn btn--lg btn--primary">
+        <a href="registro.php" class="btn btn--lg btn--primary">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
@@ -337,8 +337,8 @@
           <p class="cta-banner__sub">Regístrate en menos de 2 minutos y empieza a reportar incidencias de forma organizada.</p>
         </div>
         <div class="cta-banner__actions">
-          <a href="registro.html" class="btn btn--lg btn--primary">Crear mi cuenta</a>
-          <a href="login.html" class="btn btn--lg btn--ghost">Ya tengo cuenta</a>
+          <a href="registro.php" class="btn btn--lg btn--primary">Crear mi cuenta</a>
+          <a href="login.php" class="btn btn--lg btn--ghost">Ya tengo cuenta</a>
         </div>
       </div>
     </div>
@@ -356,8 +356,8 @@
 
       <div class="footer__links">
         <p class="footer__link-title">Sistema</p>
-        <a href="login.html">Iniciar sesión</a>
-        <a href="registro.html">Registrarse</a>
+        <a href="login.php">Iniciar sesión</a>
+        <a href="registro.php">Registrarse</a>
         <a href="directorio.php">Directorio</a>
       </div>
 

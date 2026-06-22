@@ -95,6 +95,9 @@ $error = $_GET['error'] ?? '';
         <span>Vecinos</span>
       </a>
 
+      <a href="admin-fraccionamientos.php" class="sidebar__link">
+        <span>Fraccionamientos</span>
+      </a>
       <a href="directorio-admin.php" class="sidebar__link sidebar__link--active">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         <span>Trabajadores</span>
@@ -107,10 +110,7 @@ $error = $_GET['error'] ?? '';
 
       <p class="sidebar__section-label">Cuenta</p>
 
-      <a href="App/controllers/UsuarioController.php?accion=logout" class="sidebar__link sidebar__link--logout">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        <span>Cerrar sesión</span>
-      </a>
+      <?= formularioLogout() ?>
     </nav>
 
     <div class="sidebar__user">
@@ -148,6 +148,9 @@ $error = $_GET['error'] ?? '';
           </span>
           <input type="text" id="searchInput" class="search-input" placeholder="Buscar por nombre o especialidad..." oninput="filtrarTrabajadores()">
         </div>
+        <button type="button" class="btn btn--primary worker-admin__new" onclick="abrirModalTrabajador()">
+          Nuevo trabajador
+        </button>
         <div class="filtros">
           <button class="filtro-btn filtro-btn--active" data-filtro="todos"         onclick="setFiltro(this)">Todos</button>
           <button class="filtro-btn"                    data-filtro="electricista"  onclick="setFiltro(this)">⚡ Electricista</button>
@@ -175,7 +178,12 @@ $error = $_GET['error'] ?? '';
         ?>
         <div class="trabajador-card"
              data-especialidad="<?= $t['especialidad'] ?>"
-             data-nombre="<?= htmlspecialchars(strtolower($t['nombre'] . ' ' . $t['apellidos'])) ?>">
+             data-nombre="<?= htmlspecialchars(strtolower($t['nombre'] . ' ' . $t['apellidos'])) ?>"
+             data-id="<?= $t['id'] ?>"
+             data-nombre-real="<?= htmlspecialchars($t['nombre']) ?>"
+             data-apellidos="<?= htmlspecialchars($t['apellidos']) ?>"
+             data-telefono="<?= htmlspecialchars($t['telefono']) ?>"
+             data-disponibilidad="<?= htmlspecialchars($t['disponibilidad']) ?>">
 
           <div class="trabajador-card__header">
             <div class="trabajador-card__avatar trabajador-card__avatar--<?= $color_n ?>"><?= $t_ini ?></div>
@@ -196,7 +204,7 @@ $error = $_GET['error'] ?? '';
             </div>
           </div>
 
-          <div class="trabajador-card__footer">
+          <div class="trabajador-card__footer trabajador-card__footer--admin">
             <a href="tel:<?= $tel_raw ?>" class="btn-contactar btn-contactar--tel btn-contactar--full">📞 Llamar</a>
             <?php if ($libre && !$sin_rep): ?>
               <button class="btn-contactar btn-contactar--reporte"
@@ -208,6 +216,18 @@ $error = $_GET['error'] ?? '';
             <?php else: ?>
               <button class="btn-contactar btn-contactar--reporte" disabled>Sin reportes</button>
             <?php endif; ?>
+            <button type="button" class="btn-contactar btn-contactar--edit" onclick="abrirModalTrabajador(this.closest('.trabajador-card'))">
+              Editar
+            </button>
+            <form method="POST" action="App/controllers/TrabajadorController.php" class="worker-admin__availability-form">
+              <input type="hidden" name="accion" value="disponibilidad">
+              <input type="hidden" name="trabajador_id" value="<?= $t['id'] ?>">
+              <input type="hidden" name="disponibilidad" value="<?= $libre ? 'ocupado' : 'disponible' ?>">
+              <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generarCSRF()) ?>">
+              <button type="submit" class="btn-contactar btn-contactar--status">
+                <?= $libre ? 'Marcar ocupado' : 'Liberar' ?>
+              </button>
+            </form>
           </div>
 
         </div>
@@ -229,6 +249,68 @@ $error = $_GET['error'] ?? '';
 
     </div>
   </main>
+
+
+  <!-- Modal para crear o editar trabajadores -->
+  <div class="modal-overlay" id="modalTrabajadorOverlay" style="display:none" onclick="cerrarModalTrabajadorSiOverlay(event)">
+    <div class="modal modal--worker">
+      <form method="POST" action="App/controllers/TrabajadorController.php" onsubmit="return validarTrabajadorForm()">
+        <input type="hidden" name="accion" id="trabajadorAccion" value="crear">
+        <input type="hidden" name="trabajador_id" id="trabajadorId" value="">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generarCSRF()) ?>">
+
+        <button type="button" class="modal__close" onclick="cerrarModalTrabajador()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+
+        <h2 class="modal__title" id="trabajadorModalTitle">Nuevo trabajador</h2>
+        <p class="modal__desc">Registra o actualiza los datos del personal disponible para atender reportes.</p>
+
+        <div class="worker-form">
+          <label class="worker-form__field">
+            <span>Nombre</span>
+            <input type="text" name="nombre" id="trabajadorNombre" class="worker-form__input" required>
+          </label>
+
+          <label class="worker-form__field">
+            <span>Apellidos</span>
+            <input type="text" name="apellidos" id="trabajadorApellidos" class="worker-form__input" required>
+          </label>
+
+          <label class="worker-form__field">
+            <span>Especialidad</span>
+            <select name="especialidad" id="trabajadorEspecialidad" class="worker-form__input" required>
+              <option value="electricista">Electricista</option>
+              <option value="plomero">Plomero</option>
+              <option value="albanil">Albañil</option>
+              <option value="jardinero">Jardinero</option>
+              <option value="general">Mantenimiento general</option>
+            </select>
+          </label>
+
+          <label class="worker-form__field">
+            <span>Teléfono</span>
+            <input type="tel" name="telefono" id="trabajadorTelefono" class="worker-form__input" required>
+          </label>
+
+          <label class="worker-form__field">
+            <span>Disponibilidad</span>
+            <select name="disponibilidad" id="trabajadorDisponibilidad" class="worker-form__input" required>
+              <option value="disponible">Disponible</option>
+              <option value="ocupado">Ocupado</option>
+            </select>
+          </label>
+        </div>
+
+        <span class="form__error" id="error-trabajador"></span>
+
+        <div class="modal__actions">
+          <button type="button" class="btn btn--ghost" onclick="cerrarModalTrabajador()">Cancelar</button>
+          <button type="submit" class="btn btn--primary" id="trabajadorSubmit">Guardar trabajador</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
 
   <!-- Modal para asignar trabajador a un reporte sin asignar -->
@@ -282,11 +364,6 @@ $error = $_GET['error'] ?? '';
 
   <script src="Carpeta JS/funciones.js"></script>
   <script>
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('sidebar--open');
-      document.getElementById('sidebarOverlay').classList.toggle('overlay--visible');
-    }
-
     /* --- Filtros del directorio --- */
     function filtrarTrabajadores() {
       const texto        = document.getElementById('searchInput').value.toLowerCase();
@@ -322,6 +399,44 @@ $error = $_GET['error'] ?? '';
       document.getElementById('noResultados').style.display = visibles === 0 ? 'block' : 'none';
     }
 
+    /* --- Crear / editar trabajadores --- */
+    function abrirModalTrabajador(card = null) {
+      const esEdicion = Boolean(card);
+
+      document.getElementById('trabajadorModalTitle').textContent = esEdicion ? 'Editar trabajador' : 'Nuevo trabajador';
+      document.getElementById('trabajadorSubmit').textContent = esEdicion ? 'Guardar cambios' : 'Crear trabajador';
+      document.getElementById('trabajadorAccion').value = esEdicion ? 'actualizar' : 'crear';
+      document.getElementById('trabajadorId').value = esEdicion ? card.dataset.id : '';
+      document.getElementById('trabajadorNombre').value = esEdicion ? card.dataset.nombreReal : '';
+      document.getElementById('trabajadorApellidos').value = esEdicion ? card.dataset.apellidos : '';
+      document.getElementById('trabajadorEspecialidad').value = esEdicion ? card.dataset.especialidad : 'general';
+      document.getElementById('trabajadorTelefono').value = esEdicion ? card.dataset.telefono : '';
+      document.getElementById('trabajadorDisponibilidad').value = esEdicion ? card.dataset.disponibilidad : 'disponible';
+      document.getElementById('error-trabajador').textContent = '';
+      document.getElementById('modalTrabajadorOverlay').style.display = 'flex';
+    }
+
+    function cerrarModalTrabajador() {
+      document.getElementById('modalTrabajadorOverlay').style.display = 'none';
+    }
+
+    function cerrarModalTrabajadorSiOverlay(e) {
+      if (e.target === document.getElementById('modalTrabajadorOverlay')) cerrarModalTrabajador();
+    }
+
+    function validarTrabajadorForm() {
+      const nombre = document.getElementById('trabajadorNombre').value.trim();
+      const apellidos = document.getElementById('trabajadorApellidos').value.trim();
+      const telefono = document.getElementById('trabajadorTelefono').value.trim();
+
+      if (!nombre || !apellidos || !telefono) {
+        document.getElementById('error-trabajador').textContent = 'Completa nombre, apellidos y teléfono.';
+        return false;
+      }
+
+      return true;
+    }
+
     /* --- Modal de asignación --- */
     function abrirModalAsignar(trabajadorId, nombre, especialidad) {
       document.getElementById('modalNombre').textContent       = nombre;
@@ -350,7 +465,12 @@ $error = $_GET['error'] ?? '';
       if (e.target === document.getElementById('modalOverlay')) cerrarModal();
     }
 
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModal(); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        cerrarModal();
+        cerrarModalTrabajador();
+      }
+    });
 
     /* Selección visual del reporte en el modal */
     document.querySelectorAll('input[name="reporte_id"]').forEach(radio => {
@@ -368,6 +488,12 @@ $error = $_GET['error'] ?? '';
 
     <?php if ($ok === 'asignado'): ?>
       mostrarToast('Trabajador asignado correctamente ✓', 'success');
+    <?php elseif ($ok === 'trabajador_creado'): ?>
+      mostrarToast('Trabajador creado correctamente ✓', 'success');
+    <?php elseif ($ok === 'trabajador_actualizado'): ?>
+      mostrarToast('Trabajador actualizado correctamente ✓', 'success');
+    <?php elseif ($ok === 'disponibilidad'): ?>
+      mostrarToast('Disponibilidad actualizada ✓', 'success');
     <?php elseif ($error): ?>
       mostrarToast('Ocurrió un error. Intenta de nuevo.', 'error');
     <?php endif; ?>

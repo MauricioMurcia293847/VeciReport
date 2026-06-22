@@ -6,7 +6,7 @@
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../helpers/auth.php';
 
-$accion = $_POST['accion'] ?? $_GET['accion'] ?? '';
+$accion = $_POST['accion'] ?? '';
 
 switch ($accion) {
     case 'crear':
@@ -25,8 +25,7 @@ switch ($accion) {
         break;
 
     default:
-        header('Location: /VeciReport/dashboard.php');
-        exit;
+        redirectTo('dashboard.php');
 }
 
 
@@ -48,18 +47,15 @@ function crearReporte(): void {
     $tipos_validos = ['individual', 'colectivo'];
 
     if (!in_array($categoria, $cats_validas) || !in_array($tipo, $tipos_validos)) {
-        header('Location: /VeciReport/reporte.php?error=datos_invalidos');
-        exit;
+        redirectTo('reporte.php?error=datos_invalidos');
     }
 
     if (strlen($descripcion) < 10) {
-        header('Location: /VeciReport/reporte.php?error=descripcion_corta');
-        exit;
+        redirectTo('reporte.php?error=descripcion_corta');
     }
 
     if (!$color_casa || !$num_casa) {
-        header('Location: /VeciReport/reporte.php?error=campos_vacios');
-        exit;
+        redirectTo('reporte.php?error=campos_vacios');
     }
 
     $stmt = $pdo->prepare("SELECT id FROM vecinos WHERE usuario_id = ?");
@@ -67,8 +63,7 @@ function crearReporte(): void {
     $vecino = $stmt->fetch();
 
     if (!$vecino) {
-        header('Location: /VeciReport/reporte.php?error=vecino_no_encontrado');
-        exit;
+        redirectTo('reporte.php?error=vecino_no_encontrado');
     }
 
     $vecino_id = $vecino['id'];
@@ -76,6 +71,9 @@ function crearReporte(): void {
     $foto_path = null;
     if (!empty($_FILES['foto']['tmp_name'])) {
         $foto_path = subirFoto();
+        if ($foto_path === null) {
+            redirectTo('reporte.php?error=foto_invalida');
+        }
     }
 
     try {
@@ -104,13 +102,11 @@ function crearReporte(): void {
 
         $pdo->commit();
 
-        header("Location: /VeciReport/reporte.php?ok=1&id={$reporte_id}");
-        exit;
+        redirectTo("reporte.php?ok=1&id={$reporte_id}");
 
     } catch (PDOException $e) {
         $pdo->rollBack();
-        header('Location: /VeciReport/reporte.php?error=error_servidor');
-        exit;
+        redirectTo('reporte.php?error=error_servidor');
     }
 }
 
@@ -125,8 +121,7 @@ function marcarAtendido(): void {
     $admin_id   = usuarioActual();
 
     if (!$reporte_id) {
-        header('Location: /VeciReport/admin-reportes.php?error=1');
-        exit;
+        redirectTo('admin-reportes.php?error=1');
     }
 
     $stmt = $pdo->prepare("UPDATE reportes SET estado = 'atendido' WHERE id = ?");
@@ -145,8 +140,7 @@ function marcarAtendido(): void {
         $_SERVER['REMOTE_ADDR'] ?? ''
     ]);
 
-    header('Location: /VeciReport/admin-reportes.php?ok=atendido');
-    exit;
+    redirectTo('admin-reportes.php?ok=atendido');
 }
 
 
@@ -162,8 +156,7 @@ function asignarTrabajador(): void {
     $notas         = trim($_POST['notas'] ?? '');
 
     if (!$reporte_id || !$trabajador_id) {
-        header('Location: /VeciReport/admin-reportes.php?error=1');
-        exit;
+        redirectTo('admin-reportes.php?error=1');
     }
 
     try {
@@ -199,13 +192,11 @@ function asignarTrabajador(): void {
 
         $pdo->commit();
 
-        header('Location: /VeciReport/admin-reportes.php?ok=asignado');
-        exit;
+        redirectTo('admin-reportes.php?ok=asignado');
 
     } catch (PDOException $e) {
         $pdo->rollBack();
-        header('Location: /VeciReport/admin-reportes.php?error=1');
-        exit;
+        redirectTo('admin-reportes.php?error=1');
     }
 }
 
@@ -213,19 +204,12 @@ function asignarTrabajador(): void {
 
 // Sube la foto del reporte al servidor
 function subirFoto(): ?string {
-    $archivo    = $_FILES['foto'];
-    $extension  = strtolower(pathinfo($archivo['name'], PATHINFO_EXTENSION));
-    $permitidos = ['jpg', 'jpeg', 'png'];
-
-    if (!in_array($extension, $permitidos)) return null;
-    if ($archivo['size'] > 5 * 1024 * 1024) return null;
-
-    $carpeta = __DIR__ . '/../../uploads/reportes/';
-    $nombre  = uniqid('rep_', true) . '.' . $extension;
-    $ruta    = $carpeta . $nombre;
-
-    if (!is_dir($carpeta)) mkdir($carpeta, 0755, true);
-    if (!move_uploaded_file($archivo['tmp_name'], $ruta)) return null;
-
-    return 'uploads/reportes/' . $nombre;
+    return subirArchivoSeguro(
+        'foto',
+        'reportes',
+        ['jpg', 'jpeg', 'png'],
+        ['image/jpeg', 'image/png'],
+        5 * 1024 * 1024,
+        'rep_'
+    );
 }

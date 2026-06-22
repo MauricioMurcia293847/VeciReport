@@ -1,206 +1,286 @@
-# VeciReport — README 
+# VeciReport
 
-## Contexto del proyecto
+Sistema web para reportar, administrar y dar seguimiento a incidencias dentro de un fraccionamiento.
 
-Sistema web de gestión de incidencias vecinales para un fraccionamiento. Permite a los vecinos reportar problemas (luz, agua, trabajadores, otros) y al administrador (guardia) gestionarlos y asignar trabajadores.
+VeciReport permite que los vecinos registren problemas de luz, agua, mantenimiento u otros servicios; el administrador puede aprobar vecinos, asignar trabajadores, atender reportes, gestionar el directorio y revisar la bitacora del sistema.
 
-Proyecto académico universitario — carrera: Desarrollo de Software Multiplataforma (DMS52), Universidad Tecnológica de Ciudad Juárez.
-
----
-
-## Stack tecnológico
-
-- **Frontend:** HTML5, CSS3, JavaScript vanilla
-- **Backend:** PHP 8.2 (sin framework)
-- **Base de datos:** MySQL 8.0 (puerto 3306, servidor independiente — NO el MySQL de XAMPP)
-- **Servidor local:** Apache via XAMPP (solo Apache, MySQL corre independiente)
-- **Ruta del proyecto:** `C:\xampp\htdocs\VeciReport\`
-- **URL base:** `http://localhost/VeciReport/`
+Proyecto desarrollado como aplicacion web academica y preparado como proyecto de portafolio para LinkedIn/GitHub.
 
 ---
 
-## Credenciales de base de datos
+## Vista General
+
+VeciReport resuelve un flujo comun en comunidades privadas o fraccionamientos:
+
+1. Un vecino se registra con datos de domicilio y comprobante.
+2. El administrador aprueba o bloquea vecinos.
+3. El vecino crea reportes con descripcion, categoria, ubicacion y foto opcional.
+4. El administrador asigna trabajadores disponibles.
+5. El reporte cambia de estado hasta quedar atendido.
+6. El sistema registra acciones importantes en bitacora.
+
+---
+
+## Estado Del Proyecto
+
+El proyecto ya esta conectado a PHP, sesiones y MySQL. Fue probado localmente con Apache de XAMPP y MySQL en el puerto `3306`.
+
+Estado actual:
+
+- Pantallas principales convertidas a PHP.
+- HTML duplicados eliminados.
+- Login funcional con roles.
+- Sesiones protegidas por rol.
+- Formularios POST protegidos con CSRF.
+- Logout por POST con CSRF.
+- Perfil del vecino editable.
+- Uploads validados por extension, tamano y MIME real.
+- Directorio de trabajadores conectado a base de datos.
+- Modulo de fraccionamientos para limitar registros a comunidades activas.
+- Registro con selector de ubicacion real usando Leaflet/OpenStreetMap.
+- Demo publica controlada con cuentas de prueba y datos semilla.
+- Gestion administrativa de reportes, vecinos, trabajadores y bitacora.
+
+---
+
+## Funcionalidades
+
+### Vecino
+
+- Registro con comprobante de domicilio.
+- Seleccion de fraccionamiento activo durante el registro.
+- Seleccion de ubicacion real dentro del area permitida del fraccionamiento.
+- Login cuando la cuenta fue aprobada.
+- Dashboard con resumen real de reportes.
+- Creacion de reportes por categoria.
+- Subida opcional de foto del problema.
+- Consulta de historial de reportes.
+- Perfil editable con datos reales.
+- Directorio de trabajadores en modo consulta y llamada.
+
+### Administrador
+
+- Login con rol `admin`.
+- Vista general de actividad.
+- Aprobacion, bloqueo y desbloqueo de vecinos.
+- Consulta completa de reportes.
+- Asignacion de trabajadores disponibles.
+- Marcado de reportes como atendidos.
+- Creacion y edicion de trabajadores.
+- Creacion y activacion/desactivacion de fraccionamientos.
+- Cambio de disponibilidad de trabajadores.
+- Revision de bitacora del sistema.
+
+### Seguridad Y Robustez
+
+- Passwords almacenados con `password_hash()`.
+- Validacion de credenciales con `password_verify()`.
+- Proteccion CSRF en formularios POST.
+- Logout protegido por POST y CSRF.
+- Control de acceso con `requiereVecino()` y `requiereAdmin()`.
+- Salida dinamica protegida con `htmlspecialchars()`.
+- Uploads validados con `finfo`.
+- Nombres de archivo aleatorios con `random_bytes()`.
+- `database.php` ignorado por Git.
+- `app.php` opcional para configurar la ruta base en hosting.
+- Errores de conexion sin exponer detalles internos.
+
+---
+
+## Stack Tecnico
+
+| Capa | Tecnologia |
+|---|---|
+| Frontend | HTML5, CSS3, JavaScript vanilla, Leaflet |
+| Backend | PHP 8.2 sin framework |
+| Base de datos | MySQL 8.0 |
+| Mapas | Leaflet con tiles de OpenStreetMap |
+| Servidor local | Apache con XAMPP |
+| Conexion BD | PDO |
+| Autenticacion | Sesiones PHP |
+| Seguridad | CSRF, roles, sanitizacion, validacion de uploads |
+
+---
+
+## Capturas
+
+### Landing Publica
+
+![Landing publica](docs/screenshots/01-landing.png)
+
+### Acceso Demo
+
+![Login con acceso demo](docs/screenshots/02-login.png)
+
+### Panel Del Vecino
+
+![Dashboard del vecino](docs/screenshots/03-dashboard-vecino.png)
+
+### Nuevo Reporte
+
+![Formulario de nuevo reporte](docs/screenshots/04-nuevo-reporte.png)
+
+### Administracion De Reportes
+
+![Gestion de reportes](docs/screenshots/07-admin-reportes.png)
+
+### Fraccionamientos Con Mapa
+
+![Gestion de fraccionamientos](docs/screenshots/11-admin-fraccionamientos.png)
+
+Mas capturas del flujo completo estan en `docs/screenshots/`.
+
+Guia detallada: `docs/screenshots/README.md`.
+
+La guia para preparar una demo publica esta en `docs/demo.md`.
+
+---
+
+## Instalacion Local
+
+1. Colocar el proyecto en:
+
+```text
+C:\xampp\htdocs\VeciReport\
+```
+
+2. Crear la base de datos importando:
+
+```text
+database/vecireport.sql
+```
+
+3. Crear el archivo local de conexion:
+
+```text
+App/config/database.php
+```
+
+Puedes copiar `App/config/database.example.php` y ajustar credenciales:
 
 ```php
-DB_HOST = 'localhost'
-DB_PORT = '3306'
-DB_NAME = 'vecireport'
-DB_USER = 'root'
-DB_PASS = 'Murciaaquino1010'
+define('DB_HOST', 'localhost');
+define('DB_PORT', '3306');
+define('DB_NAME', 'vecireport');
+define('DB_USER', 'root');
+define('DB_PASS', 'tu_password');
+```
+
+Opcionalmente puedes copiar `App/config/app.example.php` como `App/config/app.php` si necesitas fijar manualmente la ruta base publica.
+
+4. Encender Apache y MySQL desde XAMPP.
+
+5. Abrir:
+
+```text
+http://localhost/VeciReport/
 ```
 
 ---
 
-## Estado del sistema
+## Credenciales Iniciales
 
-El sistema está **completamente convertido a PHP**. Todas las páginas internas leen datos reales de la BD y están protegidas por sesión.
+El archivo `database/vecireport.sql` incluye un administrador inicial:
 
-### Páginas estáticas (HTML — sin conversión pendiente)
+```text
+Correo: admin@vecireport.com
+Password: admin1234
+```
 
-| Archivo | Rol |
-|---------|-----|
-| `index.html` | Landing page pública |
-| `login.html` | Formulario de login (envía a `UsuarioController.php`) |
-| `registro.html` | Formulario de registro de vecinos |
+Para probar como vecino:
 
-### Páginas PHP activas
+1. Crear una cuenta desde `registro.php`.
+2. Entrar como admin.
+3. Aprobar el vecino en `admin-vecinos.php`.
+4. Iniciar sesion con la cuenta aprobada.
 
-| Archivo | Rol | Acceso |
-|---------|-----|--------|
-| `dashboard.php` | Panel del vecino con KPIs y últimos reportes | Vecino |
-| `reporte.php` | Crear nuevo reporte con foto opcional | Vecino |
-| `mis-reportes.php` | Historial de reportes del vecino con filtros | Vecino |
-| `perfil.php` | Datos del perfil y estadísticas del vecino | Vecino |
-| `directorio.php` | Directorio de trabajadores (solo ver y llamar) | Vecino |
-| `admin.php` | Panel resumen: KPIs, reportes activos, trabajadores, vecinos recientes | Admin |
-| `admin-reportes.php` | Todos los reportes con filtros, asignación y marcar atendido | Admin |
-| `admin-vecinos.php` | Lista de vecinos con opciones de aprobar y bloquear | Admin |
-| `admin-bitacora.php` | Bitácora completa de acciones del sistema | Admin |
-| `directorio-admin.php` | Directorio de trabajadores con modal de asignación a reportes | Admin |
+Credenciales incluidas para demo de portafolio:
 
-### Carpeta backup/
-
-Contiene las versiones HTML estáticas originales de todas las páginas ya convertidas a PHP. Solo para referencia, no se sirven en producción.
+```text
+Admin demo:  admin@vecireport.com / admin1234
+Vecino demo: vecino.demo@vecireport.com / demo123
+```
 
 ---
 
-## Estructura de carpetas
+## Estructura Principal
 
-```
+```text
 VeciReport/
-│
-│── Páginas estáticas (HTML):
-├── index.html                    ← Landing page pública
-├── login.html                    ← Formulario de login
-├── registro.html                 ← Formulario de registro
-│
-│── Páginas PHP (conectadas a BD y sesión):
-├── dashboard.php                 ← Panel del vecino
-├── reporte.php                   ← Crear nuevo reporte
-├── mis-reportes.php              ← Historial de reportes del vecino
-├── perfil.php                    ← Perfil del vecino
-├── directorio.php                ← Directorio de trabajadores (vecino)
-├── admin.php                     ← Panel resumen del administrador
-├── admin-reportes.php            ← Todos los reportes (admin)
-├── admin-vecinos.php             ← Gestión de vecinos (admin)
-├── admin-bitacora.php            ← Bitácora del sistema (admin)
-├── directorio-admin.php          ← Directorio con asignación (admin)
-│
-├── App/
-│   ├── config/
-│   │   └── database.php          ← Conexión PDO (función conectar())
-│   ├── controllers/
-│   │   ├── UsuarioController.php ← login, logout, aprobar, bloquear
-│   │   └── ReporteController.php ← crear, atender, asignar
-│   └── helpers/
-│       └── auth.php              ← requiereLogin, requiereAdmin, requiereVecino, iniciarSesion, cerrarSesion
-│
-├── Carpeta CSS/
-│   ├── style.css                 ← Variables globales, navbar, hero, cards, footer (tema claro)
-│   ├── dashboard.css             ← Sidebar, topbar, KPIs, layout base de páginas internas
-│   ├── admin.css                 ← Estilos del panel admin, badge Admin, sidebar 270px
-│   ├── admin-reportes.css        ← Cards de reportes admin, filtros, vecinos, bitácora
-│   ├── login.css                 ← Layout 2 columnas, showcase decorativo
-│   ├── registro.css              ← Formulario de registro, drag&drop comprobante
-│   ├── reporte.css               ← Cards de categoría, selector tipo, preview, modal éxito
-│   ├── mis-reportes.css          ← Cards mobile-first, grid 2 col desktop / 1 móvil
-│   ├── directorio.css            ← Grid trabajadores, modal asignación
-│   └── perfil.css                ← Layout perfil, stats, accesos
-│
-├── Carpeta JS/
-│   └── funciones.js              ← toggleSidebar, mostrarToast, cerrarModal, validarCorreo
-│
-├── uploads/
-│   ├── .htaccess                 ← Deniega acceso HTTP directo a todos los archivos subidos
-│   ├── comprobantes/             ← Comprobantes de domicilio del registro
-│   └── reportes/                 ← Fotos de reportes (opcional, jpg/jpeg/png, máx 5 MB)
-│
-├── backup/                       ← Versiones HTML originales de todas las páginas convertidas
-│   ├── admin.html, admin-reportes.html, admin-vecinos.html, admin-bitacora.html
-│   ├── dashboard.html, reporte.html, mis-reportes.html, perfil.html
-│   └── directorio.html, directorio-admin.html
-│
-├── database/
-│   └── vecireport.sql            ← Esquema completo + datos iniciales (admin + 8 trabajadores)
-│
-├── .htaccess                     ← Procesa login.html y registro.html como PHP (soporte CSRF)
-└── test_conexion.php             ← Eliminar antes de producción
+|-- index.php
+|-- login.php
+|-- registro.php
+|-- dashboard.php
+|-- reporte.php
+|-- mis-reportes.php
+|-- perfil.php
+|-- directorio.php
+|-- admin.php
+|-- admin-reportes.php
+|-- admin-vecinos.php
+|-- admin-fraccionamientos.php
+|-- admin-bitacora.php
+|-- directorio-admin.php
+|-- App/
+|   |-- config/
+|   |   |-- database.example.php
+|   |   |-- app.example.php
+|   |   `-- database.php
+|   |-- controllers/
+|   |   |-- UsuarioController.php
+|   |   |-- ReporteController.php
+|   |   |-- TrabajadorController.php
+|   |   `-- FraccionamientoController.php
+|   `-- helpers/
+|       `-- auth.php
+|-- Carpeta CSS/
+|-- Carpeta JS/
+|-- Carpeta Img/
+|-- database/
+|   |-- vecireport.sql
+|   |-- demo_seed.sql
+|   `-- migrations/
+|-- docs/
+|   |-- demo.md
+|   |-- hosting.md
+|   `-- screenshots/
+`-- uploads/
+    |-- comprobantes/
+    `-- reportes/
 ```
 
 ---
 
-## Base de datos — esquema
+## Paginas
 
-```sql
--- Usuarios (vecinos y admin)
-usuarios (id, nombre, apellidos, correo, password_hash, rol ENUM('vecino','admin'), estado ENUM('pendiente','activo','bloqueado'), created_at, updated_at)
+### Publicas
 
--- Perfil extendido del vecino
-vecinos (id, usuario_id FK, num_calle, num_casa, color_casa, comprobante_path)
+| Archivo | Funcion |
+|---|---|
+| `index.php` | Landing publica |
+| `login.php` | Login con CSRF |
+| `registro.php` | Registro con comprobante, fraccionamiento y mapa |
 
--- Trabajadores (sin login, solo datos gestionados por el admin)
-trabajadores (id, nombre, apellidos, especialidad ENUM('electricista','plomero','albanil','jardinero','general'), telefono, disponibilidad ENUM('disponible','ocupado'), created_at)
+### Vecino
 
--- Reportes creados por vecinos
-reportes (id, vecino_id FK, trabajador_id FK NULL, categoria ENUM('luz','agua','trabajadores','otros'), tipo ENUM('individual','colectivo'), descripcion, color_casa, num_casa, foto_path NULL, estado ENUM('pendiente','en_proceso','atendido'), created_at, updated_at)
+| Archivo | Funcion |
+|---|---|
+| `dashboard.php` | Panel principal del vecino |
+| `reporte.php` | Crear reporte |
+| `mis-reportes.php` | Historial de reportes |
+| `perfil.php` | Perfil editable |
+| `directorio.php` | Directorio de trabajadores en modo consulta |
 
--- Historial de asignaciones
-asignaciones (id, reporte_id FK, trabajador_id FK, admin_id FK, notas NULL, assigned_at)
+### Administrador
 
--- Bitácora de acciones del sistema
-bitacora (id, usuario_id FK NULL, tipo_accion ENUM('login','logout','registro','reporte_creado','reporte_atendido','asignacion','vecino_aprobado','vecino_bloqueado','sistema'), descripcion, ip, created_at)
-```
-
----
-
-## Usuarios y datos en la BD
-
-### Usuarios registrados
-
-| id | nombre | correo | rol | estado |
-|----|--------|--------|-----|--------|
-| 1 | Guardia | admin@vecireport.com | admin | activo |
-| 2 | Mauricio | murciamauricio921@gmail.com | vecino | activo |
-| 3 | Mauricio | mauricioantoniomurchiaaquino@gmail.com | vecino | activo |
-
-**Contraseña del usuario id=2:** hash de `password` generado via MySQL Workbench.
-
-### Trabajadores registrados
-
-8 trabajadores ficticios en la tabla `trabajadores`. Son datos fijos de prueba, no se crean desde ninguna vista del sistema (requiere inserción directa en BD o Workbench).
-
-### Estado de los datos
-
-- No hay reportes reales en la BD (solo los que se creen desde `reporte.php`)
-- No hay vecinos en estado `pendiente` (el flujo de registro no inserta en BD — ver Problemas conocidos)
-- La bitácora se puebla automáticamente con cada login, reporte, asignación y cambio de estado
-
----
-
-## Lógica del sistema
-
-### Roles
-
-- **Vecino:** se registra → queda `pendiente` hasta aprobación del admin → puede hacer login → crea reportes → ve sus reportes → ve directorio de trabajadores (solo llamar)
-- **Admin (Guardia):** ve todos los reportes, los filtra, asigna trabajadores, los marca como atendidos, aprueba/bloquea vecinos, ve bitácora
-- **Trabajador:** sin login, solo datos gestionados por el admin
-
-### Flujo de reporte
-
-1. Vecino llena `reporte.php` → POST a `ReporteController.php?accion=crear`
-2. Se valida, se inserta en `reportes` con `estado='pendiente'`, se registra en `bitacora`
-3. Admin ve el reporte en `admin-reportes.php` o `admin.php`
-4. Admin asigna trabajador → `estado='en_proceso'`, `trabajador_id` se completa, `trabajadores.disponibilidad='ocupado'`, se inserta en `asignaciones` y `bitacora`
-5. Admin marca atendido → `estado='atendido'`, se registra en `bitacora`
-
-### Flujo de login / sesión
-
-- `login.html` → POST a `UsuarioController.php?accion=login`
-- Si es admin → redirige a `admin-reportes.php`
-- Si es vecino activo → redirige a `dashboard.php`
-- Si es pendiente → redirige a `login.html?error=pendiente`
-- Si es bloqueado → redirige a `login.html?error=bloqueado`
-- Logout: `App/controllers/UsuarioController.php?accion=logout` → destruye sesión → redirige a `login.html`
+| Archivo | Funcion |
+|---|---|
+| `admin.php` | Resumen general |
+| `admin-reportes.php` | Gestion de reportes |
+| `admin-vecinos.php` | Gestion de vecinos |
+| `admin-fraccionamientos.php` | Gestion de fraccionamientos |
+| `directorio-admin.php` | Gestion de trabajadores |
+| `admin-bitacora.php` | Historial de acciones |
 
 ---
 
@@ -208,176 +288,146 @@ bitacora (id, usuario_id FK NULL, tipo_accion ENUM('login','logout','registro','
 
 ### `UsuarioController.php`
 
-Recibe `accion` por POST o GET.
-
-| Acción | Método | Protección | Descripción |
-|--------|--------|------------|-------------|
-| `login` | POST | — | Valida credenciales, inicia sesión, registra en bitácora |
-| `logout` | GET | `requiereLogin` | Destruye sesión y redirige a `login.html` |
-| `aprobar` | POST | `requiereAdmin` | Cambia `estado` de vecino a `activo`, registra en bitácora |
-| `bloquear` | POST | `requiereAdmin` | Cambia `estado` de vecino a `bloqueado`, registra en bitácora |
-
-> **Sin implementar:** `registro` — no existe un `case 'registro'` en el switch. El formulario `registro.html` no llega a crear usuarios en la BD.
+| Accion | Metodo | Acceso | Funcion |
+|---|---|---|---|
+| `login` | POST | Publico | Valida credenciales e inicia sesion |
+| `logout` | POST | Sesion activa | Cierra sesion con CSRF |
+| `registro` | POST | Publico | Registra vecino pendiente |
+| `actualizar_perfil` | POST | Vecino | Actualiza perfil y password opcional |
+| `aprobar` | POST | Admin | Activa vecino pendiente o bloqueado |
+| `bloquear` | POST | Admin | Bloquea vecino activo |
 
 ### `ReporteController.php`
 
-Recibe `accion` por POST.
+| Accion | Metodo | Acceso | Funcion |
+|---|---|---|---|
+| `crear` | POST | Vecino | Crea reporte |
+| `asignar` | POST | Admin | Asigna trabajador |
+| `atender` | POST | Admin | Marca reporte como atendido |
 
-| Acción | Método | Protección | Descripción |
-|--------|--------|------------|-------------|
-| `crear` | POST | `requiereVecino` | Valida datos, inserta reporte, sube foto opcional, registra en bitácora |
-| `atender` | POST | `requiereAdmin` | Cambia `estado` a `atendido`, registra en bitácora |
-| `asignar` | POST | `requiereAdmin` | Asigna trabajador, cambia `estado` a `en_proceso`, marca trabajador como ocupado, inserta en `asignaciones` y `bitacora` |
+### `TrabajadorController.php`
+
+| Accion | Metodo | Acceso | Funcion |
+|---|---|---|---|
+| `crear` | POST | Admin | Crea trabajador |
+| `actualizar` | POST | Admin | Edita trabajador |
+| `disponibilidad` | POST | Admin | Cambia disponibilidad |
+
+### `FraccionamientoController.php`
+
+| Accion | Metodo | Acceso | Funcion |
+|---|---|---|---|
+| `crear` | POST | Admin | Crea fraccionamiento activo con poligono de mapa |
+| `estado` | POST | Admin | Activa o desactiva fraccionamiento |
 
 ---
 
-## Helpers: auth.php
+## Base De Datos
 
-```php
-requiereLogin()   // Redirige a login.html si no hay sesión
-requiereAdmin()   // Redirige a dashboard.php si no es admin (⚠ redirect stale — ver Problemas conocidos)
-requiereVecino()  // Redirige a admin.html si no es vecino (⚠ redirect stale — ver Problemas conocidos)
-iniciarSesion($usuario)  // Guarda datos en $_SESSION, regenera ID de sesión
-cerrarSesion()    // Destruye sesión, redirige a login.html
-usuarioActual()   // Retorna $_SESSION['usuario_id'] o null
-rolActual()       // Retorna $_SESSION['rol'] o null
-generarCSRF()     // Genera token CSRF en $_SESSION['csrf_token'] (idempotente) y lo retorna
-validarCSRF()     // Valida $_POST['csrf_token'] contra la sesión; responde 403 y termina si no coincide
+Tablas principales:
+
+- `usuarios`: credenciales, rol y estado.
+- `fraccionamientos`: comunidades permitidas para registro y poligono con coordenadas reales.
+- `vecinos`: domicilio, ubicacion lat/lng y comprobante.
+- `trabajadores`: datos y disponibilidad.
+- `reportes`: incidencias creadas por vecinos.
+- `asignaciones`: historial de asignaciones.
+- `bitacora`: acciones importantes del sistema.
+
+Estados usados:
+
+```text
+usuarios.estado: pendiente | activo | bloqueado
+usuarios.rol: vecino | admin
+reportes.estado: pendiente | en_proceso | atendido
+trabajadores.disponibilidad: disponible | ocupado
 ```
 
 ---
 
-## Seguridad implementada
+## Flujos Probados
 
-### CSRF tokens
+### Vecino
 
-Todos los formularios POST del sistema están protegidos contra ataques CSRF.
+1. Registro con comprobante y ubicacion dentro del mapa.
+2. Rechazo de login cuando el vecino esta pendiente.
+3. Login despues de aprobacion.
+4. Creacion de reporte.
+5. Consulta de historial.
+6. Edicion de perfil.
+7. Logout por POST.
 
-**Mecanismo:**
-- `generarCSRF()` crea un token de 64 caracteres hex (`bin2hex(random_bytes(32))`) y lo almacena en `$_SESSION['csrf_token']`.
-- Cada formulario incluye `<input type="hidden" name="csrf_token" value="...">` con el token de la sesión actual.
-- Los controladores llaman `validarCSRF()` como primera instrucción antes de procesar cualquier dato POST. Usa `hash_equals()` para la comparación (resistente a ataques de timing).
+### Administrador
 
-**Formularios protegidos:**
-
-| Archivo | Acción |
-|---------|--------|
-| `login.html` | login |
-| `registro.html` | registro |
-| `reporte.php` | crear reporte |
-| `perfil.php` | actualizar perfil |
-| `admin-vecinos.php` | aprobar / bloquear / desbloquear vecino |
-| `admin-reportes.php` | asignar trabajador / marcar atendido |
-| `admin.php` | asignar trabajador / marcar atendido |
-| `directorio-admin.php` | asignar trabajador (modal) |
-
-**Nota para `login.html` y `registro.html`:** son archivos `.html` pero se procesan como PHP gracias al `.htaccess` raíz del proyecto (`SetHandler application/x-httpd-php`). Los nombres de archivo y todos los enlaces existentes permanecen sin cambios.
-
-### Protección de archivos subidos
-
-`uploads/.htaccess` deniega todo acceso HTTP directo a la carpeta de uploads:
-
-```apache
-Order Deny,Allow
-Deny from all
-```
-
-Los archivos siguen siendo accesibles desde PHP (para lectura, descarga controlada, etc.) pero no pueden ser accedidos directamente por URL desde el navegador.
+1. Login como admin.
+2. Aprobacion de vecino.
+3. Bloqueo/desbloqueo de vecino.
+4. Asignacion de trabajador.
+5. Marcado de reporte como atendido.
+6. Creacion y edicion de trabajador.
+7. Creacion y activacion/desactivacion de fraccionamientos con mapa.
+8. Revision de bitacora.
 
 ---
 
-## CSS — tema claro
+## Verificacion Tecnica
 
-Todos los CSS fueron migrados de fondo oscuro (`#0D1B2A`) a tema claro profesional. Las variables globales están en `style.css`:
+Comandos utiles:
 
-```css
---primary:       #F8F9FA;  /* fondo del body */
---primary-light: #F3F4F6;  /* secciones alternas, sidebar footer */
---accent:        #E85D26;  /* terracota — color principal de acento */
---text:          #1A1A2E;  /* texto principal */
---text-muted:    #6B7280;  /* texto secundario */
---card-bg:       #FFFFFF;  /* fondo de tarjetas */
---border:        #E5E7EB;  /* bordes */
+```powershell
+php -l index.php
+php -l login.php
+php -l registro.php
+php -l App/controllers/UsuarioController.php
+php -l App/controllers/ReporteController.php
+php -l App/controllers/TrabajadorController.php
+php -l App/helpers/auth.php
 ```
 
-El hero de `index.html` usa imagen de fondo de Unsplash + overlay `rgba(0,0,0,0.5)`, por lo que su texto es blanco (caso especial, no usa `var(--text)`).
+Checklist manual rapido:
+
+```text
+http://localhost/VeciReport/index.php
+http://localhost/VeciReport/login.php
+http://localhost/VeciReport/registro.php
+http://localhost/VeciReport/dashboard.php
+http://localhost/VeciReport/reporte.php
+http://localhost/VeciReport/admin-reportes.php
+http://localhost/VeciReport/admin-fraccionamientos.php
+http://localhost/VeciReport/directorio-admin.php
+```
 
 ---
 
-## Problemas conocidos
+## Hosting
 
-### 1. Registro de vecinos no inserta en la BD
+La guia de despliegue para hosting compartido o cPanel esta en:
 
-`UsuarioController.php` no tiene `case 'registro'` en su switch. El formulario `registro.html` envía los datos al controlador pero la acción no está implementada, por lo que los datos se descartan y se redirige al default (`login.html`).
+```text
+docs/hosting.md
+```
 
-**Consecuencia directa:** nunca hay vecinos en estado `pendiente`, por lo que los botones de aprobación en `admin-vecinos.php` nunca tienen qué aprobar.
-
-**Solución pendiente:** agregar el `case 'registro'` en `UsuarioController.php` que inserte en `usuarios` (con `estado='pendiente'`) y en `vecinos`, y guarde el comprobante en `uploads/comprobantes/`.
-
-### 2. La BD solo tiene datos de prueba fijos
-
-- Solo 1 admin y 2 vecinos de prueba (estado `activo`)
-- 8 trabajadores fijos insertados manualmente — no se pueden crear desde el sistema
-- No existe ninguna pantalla para agregar o editar trabajadores
-- Los reportes y la bitácora solo contienen lo que se genere durante las pruebas
-
-### 3. Redirects stale en auth.php
-
-`requiereAdmin()` redirige a `/VeciReport/dashboard.html` (ya no existe, ahora es `dashboard.php`).
-`requiereVecino()` redirige a `/VeciReport/admin.html` (ya no existe, ahora es `admin.php`).
-
-Si un vecino intenta acceder a una página de admin, o viceversa, recibirá un 404. No es un error bloqueante en uso normal pero debe corregirse.
-
-### 4. Disponibilidad de trabajadores no se libera
-
-Cuando un reporte pasa a `atendido`, `trabajadores.disponibilidad` NO se cambia de `ocupado` a `disponible` en `ReporteController.php::marcarAtendido()`. Con el tiempo, todos los trabajadores quedan marcados como ocupados aunque sus reportes estén resueltos.
+Incluye configuracion de base de datos, `APP_BASE_URL`, permisos de uploads y checklist de verificacion.
 
 ---
 
-## Pendientes en orden de prioridad
+## Roadmap
 
-1. **Implementar `case 'registro'` en `UsuarioController.php`** — sin esto el sistema no admite nuevos vecinos
-2. **Corregir redirects en `auth.php`** — `dashboard.html` → `dashboard.php` y `admin.html` → `admin.php`
-3. **Liberar disponibilidad del trabajador al marcar reporte como atendido** — en `ReporteController.php::marcarAtendido()` agregar `UPDATE trabajadores SET disponibilidad='disponible' WHERE id = (SELECT trabajador_id FROM reportes WHERE id = ?)`
-4. **Quitar el campo `detalle` del error en `database.php`** en producción
+Fases completadas recientemente:
+
+- Fase 15: registro con validacion por fraccionamiento y mapa.
+- Fase 16: demo publica controlada.
+
+Mejoras tecnicas futuras:
+
+- Centralizar sidebars en includes PHP.
+- Agregar paginacion a reportes, vecinos y bitacora.
+- Agregar descarga controlada de comprobantes.
+- Preparar variables de entorno para produccion.
+- Automatizar reset periodico de demo en hosting.
 
 ---
 
-## Convenciones del proyecto
+## Autor
 
-### PHP
-
-- Conexión PDO via función `conectar()` en `database.php` (patrón singleton estático)
-- Siempre `require_once` para incluir archivos
-- Rutas de redirección absolutas con prefijo `/VeciReport/` (ej: `header('Location: /VeciReport/dashboard.php')`)
-- Sanitizar todos los outputs con `htmlspecialchars()`
-- Contraseñas con `password_hash()` / `password_verify()`
-- Transacciones PDO en operaciones multi-tabla (`beginTransaction` / `commit` / `rollBack`)
-
-### CSS
-
-- Variables globales en `style.css` — nunca usar colores hardcoded en otros archivos
-- Fuentes: Syne (`--font-display`, títulos) + DM Sans (`--font-body`, cuerpo)
-- Clases BEM modificadas: `.sidebar__link--active`, `.kpi-card--total`, `.ar-card--atendido`
-- Páginas admin llevan clase `admin-page` en `<body>` → amplía sidebar a 270px
-
-### Sidebar admin — links correctos
-
-Todos los PHP de admin usan estos hrefs en el sidebar:
-
-```
-admin.php              ← Resumen
-admin-reportes.php     ← Todos los reportes
-admin-vecinos.php      ← Vecinos
-directorio-admin.php   ← Trabajadores
-admin-bitacora.php     ← Bitácora
-App/controllers/UsuarioController.php?accion=logout
-```
-
-### Notas de infraestructura
-
-- El MySQL de XAMPP NO se usa — el puerto 3306 pertenece a MySQL Workbench / instalación independiente
-- Solo Apache de XAMPP está corriendo
-- La carpeta `App` tiene **A mayúscula** — crítico para los `require_once` en Windows
-- `funciones.js` contiene helpers globales de JS usados en múltiples páginas (`toggleSidebar`, `mostrarToast`, `cerrarModal`, `validarCorreo`)
-- Los trabajadores en la BD son datos ficticios, no personas reales
+Proyecto desarrollado por Mauricio Murcia como sistema web de gestion vecinal para portafolio profesional.

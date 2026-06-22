@@ -475,7 +475,7 @@
 
 
 /* Variante compacta del grid de cards para el resumen del admin
-   (dentro de admin.html donde ya hay una columna derecha de trabajadores) */
+   (dentro de admin.php donde ya hay una columna derecha de trabajadores) */
 .ar-cards-grid--compact {
   grid-template-columns: 1fr;
 }

@@ -1,4 +1,17 @@
-<?php require_once 'App/helpers/auth.php'; generarCSRF(); ?>
+<?php
+require_once 'App/config/database.php';
+require_once 'App/helpers/auth.php';
+
+generarCSRF();
+
+$pdo = conectar();
+$fraccionamientos = $pdo->query("
+    SELECT id, nombre, mapa_poligono
+    FROM fraccionamientos
+    WHERE activo = 1
+    ORDER BY nombre
+")->fetchAll();
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -13,6 +26,7 @@
 
   <!-- Estilos globales del proyecto -->
   <link rel="stylesheet" href="Carpeta CSS/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
   <!-- Estilos exclusivos de esta página -->
   <link rel="stylesheet" href="Carpeta CSS/registro.css">
@@ -22,7 +36,7 @@
 
   <!-- Navbar con logo y link al login -->
   <nav class="navbar navbar--simple">
-    <a href="index.html" class="navbar__brand">
+    <a href="index.php" class="navbar__brand">
       <div class="navbar__logo">
         <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
           <circle cx="14" cy="14" r="13" stroke="#00D4AA" stroke-width="2"/>
@@ -36,7 +50,7 @@
 
     <div class="navbar__actions">
       <span class="navbar__hint">¿Ya tienes cuenta?</span>
-      <a href="login.html" class="btn btn--primary">Iniciar sesión</a>
+      <a href="login.php" class="btn btn--primary">Iniciar sesión</a>
     </div>
   </nav>
 
@@ -78,7 +92,7 @@
 
       <!-- Formulario multi-paso -->
       <!-- action apunta al controlador PHP, method POST para no exponer datos en URL -->
-      <form class="registro__form" action="app/controllers/UsuarioController.php" method="POST" enctype="multipart/form-data" novalidate>
+      <form class="registro__form" action="App/controllers/UsuarioController.php" method="POST" enctype="multipart/form-data" novalidate>
 
         <!-- Campo oculto para indicarle al controlador la acción -->
         <input type="hidden" name="accion" value="registro">
@@ -198,7 +212,7 @@
           </button>
 
           <p class="registro__login-link">
-            ¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a>
+            ¿Ya tienes cuenta? <a href="login.php">Inicia sesión</a>
           </p>
 
         </div>
@@ -208,6 +222,31 @@
         <!-- PASO 2: Domicilio y comprobante -->
         <!-- Oculto por defecto, se muestra al avanzar con JS -->
         <div class="form-step" id="paso-2" style="display:none">
+
+          <div class="form__group">
+            <label class="form__label" for="fraccionamiento_id">Fraccionamiento</label>
+            <div class="form__input-wrap">
+              <span class="form__icon">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 21h18"/>
+                  <path d="M5 21V7l8-4v18"/>
+                  <path d="M19 21V11l-6-4"/>
+                </svg>
+              </span>
+              <select id="fraccionamiento_id" name="fraccionamiento_id" class="form__input" required>
+                <option value="">Selecciona tu fraccionamiento</option>
+                <?php foreach ($fraccionamientos as $fraccionamiento): ?>
+                  <option
+                    value="<?= (int) $fraccionamiento['id'] ?>"
+                    data-poligono='<?= htmlspecialchars($fraccionamiento['mapa_poligono'] ?? '', ENT_QUOTES, 'UTF-8') ?>'
+                  >
+                    <?= htmlspecialchars($fraccionamiento['nombre']) ?>
+                  </option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+            <span class="form__error" id="error-fraccionamiento_id"></span>
+          </div>
 
           <div class="form__row">
             <!-- Número de calle -->
@@ -258,6 +297,18 @@
               <input type="text" id="color_casa" name="color_casa" class="form__input" placeholder="Ej: Beige, Blanco, Azul..." required>
             </div>
             <span class="form__error" id="error-color_casa"></span>
+          </div>
+
+          <div class="form__group">
+            <label class="form__label">Ubicacion dentro del fraccionamiento</label>
+            <p class="form__hint">Selecciona tu casa dentro del area marcada en el mapa real.</p>
+
+            <div class="registro-map" id="registroMap">
+            </div>
+
+            <input type="hidden" id="ubicacion_lat" name="ubicacion_lat">
+            <input type="hidden" id="ubicacion_lng" name="ubicacion_lng">
+            <span class="form__error" id="error-ubicacion"></span>
           </div>
 
           <!-- Subida del comprobante de domicilio -->
@@ -328,6 +379,7 @@
 
 
   <script src="Carpeta JS/funciones.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
 
@@ -433,6 +485,11 @@
         /* Muestra el paso 2 y oculta el paso 1 */
         document.getElementById('paso-1').style.display = 'none';
         document.getElementById('paso-2').style.display = 'block';
+        setTimeout(() => {
+          inicializarMapaRegistro();
+          actualizarMapaFraccionamiento();
+          if (registroMapa) registroMapa.invalidateSize();
+        }, 120);
 
         /* Actualiza el indicador de pasos */
         document.getElementById('step-dot-1').classList.remove('step--active');
@@ -492,20 +549,140 @@
     });
 
     /* Validación del paso 2 antes de enviar al servidor */
+    let poligonoActual = [];
+    let registroMapa = null;
+    let poligonoLayer = null;
+    let marcadorUbicacion = null;
+
+    function puntoEnPoligonoJS(lat, lng, poligono) {
+      let dentro = false;
+
+      for (let i = 0, j = poligono.length - 1; i < poligono.length; j = i++) {
+        const yi = Number(poligono[i][0]);
+        const xi = Number(poligono[i][1]);
+        const yj = Number(poligono[j][0]);
+        const xj = Number(poligono[j][1]);
+
+        const intersecta = ((yi > lat) !== (yj > lat))
+          && (lng < ((xj - xi) * (lat - yi) / ((yj - yi) || 0.000001) + xi));
+
+        if (intersecta) dentro = !dentro;
+      }
+
+      return dentro;
+    }
+
+    function limpiarUbicacion() {
+      document.getElementById('ubicacion_lat').value = '';
+      document.getElementById('ubicacion_lng').value = '';
+      if (marcadorUbicacion && registroMapa) {
+        registroMapa.removeLayer(marcadorUbicacion);
+        marcadorUbicacion = null;
+      }
+      document.getElementById('error-ubicacion').textContent = '';
+    }
+
+    function inicializarMapaRegistro() {
+      if (registroMapa || typeof L === 'undefined') return;
+
+      registroMapa = L.map('registroMap', { scrollWheelZoom: false }).setView([31.7387, -106.4849], 15);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors',
+      }).addTo(registroMapa);
+
+      registroMapa.on('click', seleccionarUbicacion);
+    }
+
+    function actualizarMapaFraccionamiento() {
+      const select = document.getElementById('fraccionamiento_id');
+      const option = select.options[select.selectedIndex];
+      inicializarMapaRegistro();
+      limpiarUbicacion();
+
+      if (poligonoLayer) {
+        registroMapa.removeLayer(poligonoLayer);
+        poligonoLayer = null;
+      }
+
+      try {
+        poligonoActual = option?.dataset?.poligono ? JSON.parse(option.dataset.poligono) : [];
+      } catch (error) {
+        poligonoActual = [];
+      }
+
+      if (!Array.isArray(poligonoActual) || poligonoActual.length < 3) {
+        return;
+      }
+
+      poligonoLayer = L.polygon(poligonoActual, {
+        color: '#E85D26',
+        weight: 2,
+        fillColor: '#E85D26',
+        fillOpacity: 0.18,
+      }).addTo(registroMapa);
+
+      registroMapa.fitBounds(poligonoLayer.getBounds(), { padding: [18, 18] });
+      setTimeout(() => registroMapa.invalidateSize(), 80);
+    }
+
+    function seleccionarUbicacion(event) {
+      const error = document.getElementById('error-ubicacion');
+      if (!Array.isArray(poligonoActual) || poligonoActual.length < 3) {
+        error.textContent = 'Selecciona primero un fraccionamiento con mapa activo.';
+        return;
+      }
+
+      const lat = event.latlng.lat;
+      const lng = event.latlng.lng;
+
+      if (!puntoEnPoligonoJS(lat, lng, poligonoActual)) {
+        limpiarUbicacion();
+        error.textContent = 'La ubicacion debe estar dentro del area marcada.';
+        return;
+      }
+
+      document.getElementById('ubicacion_lat').value = lat.toFixed(7);
+      document.getElementById('ubicacion_lng').value = lng.toFixed(7);
+      error.textContent = '';
+
+      if (marcadorUbicacion) {
+        marcadorUbicacion.setLatLng([lat, lng]);
+      } else {
+        marcadorUbicacion = L.marker([lat, lng]).addTo(registroMapa);
+      }
+    }
+
+    document.getElementById('fraccionamiento_id').addEventListener('change', actualizarMapaFraccionamiento);
+    actualizarMapaFraccionamiento();
+
     document.querySelector('.registro__form').addEventListener('submit', function(e) {
       e.preventDefault();
       let valido = true;
 
-      ['num_calle','num_casa','color_casa'].forEach(id => {
+      ['fraccionamiento_id','num_calle','num_casa','color_casa'].forEach(id => {
         document.getElementById('error-' + id).textContent = '';
       });
+      document.getElementById('error-ubicacion').textContent = '';
 
+      const fraccionamiento = document.getElementById('fraccionamiento_id').value;
+      const ubicacionLat = document.getElementById('ubicacion_lat').value;
+      const ubicacionLng = document.getElementById('ubicacion_lng').value;
       const numCalle   = document.getElementById('num_calle').value.trim();
       const numCasa    = document.getElementById('num_casa').value.trim();
       const colorCasa  = document.getElementById('color_casa').value.trim();
       const comprobante = document.getElementById('comprobante').files.length;
       const terminos   = document.getElementById('terminos').checked;
 
+      if (!fraccionamiento) {
+        document.getElementById('error-fraccionamiento_id').textContent = 'Selecciona tu fraccionamiento.';
+        valido = false;
+      }
+      if (!ubicacionLat || !ubicacionLng) {
+        document.getElementById('error-ubicacion').textContent = 'Selecciona tu casa dentro del area marcada.';
+        valido = false;
+      }
       if (!numCalle) {
         document.getElementById('error-num_calle').textContent = 'El número de calle es obligatorio.';
         valido = false;

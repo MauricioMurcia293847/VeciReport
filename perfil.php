@@ -12,9 +12,11 @@ $usuario_id = usuarioActual();
 // Datos personales + domicilio del vecino
 $stmt = $pdo->prepare("
     SELECT u.nombre, u.apellidos, u.correo,
-           v.num_calle, v.num_casa, v.color_casa, v.comprobante_path
+           v.num_calle, v.num_casa, v.color_casa, v.ubicacion_lat, v.ubicacion_lng, v.comprobante_path,
+           f.nombre AS fraccionamiento
     FROM usuarios u
     JOIN vecinos v ON v.usuario_id = u.id
+    JOIN fraccionamientos f ON f.id = v.fraccionamiento_id
     WHERE u.id = ?
 ");
 $stmt->execute([$usuario_id]);
@@ -27,6 +29,10 @@ $correo    = $perfil['correo']    ?? $_SESSION['correo'];
 $num_calle = $perfil['num_calle'] ?? '—';
 $num_casa  = $perfil['num_casa']  ?? '—';
 $color_casa= $perfil['color_casa']?? '—';
+$fraccionamiento = $perfil['fraccionamiento'] ?? 'Fraccionamiento';
+$ubicacion_mapa = isset($perfil['ubicacion_lat'], $perfil['ubicacion_lng'])
+    ? number_format((float) $perfil['ubicacion_lat'], 7) . ', ' . number_format((float) $perfil['ubicacion_lng'], 7)
+    : 'No registrada';
 $comprobante_path = $perfil['comprobante_path'] ?? null;
 $iniciales = strtoupper(substr($nombre, 0, 1) . substr($apellidos, 0, 1));
 
@@ -72,6 +78,7 @@ function tiempoRelativo(string $fecha): string {
 // Mensajes desde el controlador (cuando se implemente actualizar_perfil)
 $ok_perfil    = isset($_GET['ok'])    && $_GET['ok']    === 'perfil';
 $error_perfil = isset($_GET['error']) && $_GET['error'] === 'perfil';
+$error_demo = isset($_GET['error']) && $_GET['error'] === 'demo';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -135,10 +142,7 @@ $error_perfil = isset($_GET['error']) && $_GET['error'] === 'perfil';
         <span>Mi perfil</span>
       </a>
 
-      <a href="App/controllers/UsuarioController.php?accion=logout" class="sidebar__link sidebar__link--logout">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        <span>Cerrar sesión</span>
-      </a>
+      <?= formularioLogout() ?>
     </nav>
 
     <div class="sidebar__user">
@@ -221,8 +225,8 @@ $error_perfil = isset($_GET['error']) && $_GET['error'] === 'perfil';
 
                 <div class="form__group perfil-grid--full">
                   <label class="form__label">Correo electrónico</label>
-                  <input type="email" name="correo" class="form__input perfil-input"
-                         value="<?= htmlspecialchars($correo) ?>" disabled>
+                  <input type="email" name="correo" class="form__input"
+                          value="<?= htmlspecialchars($correo) ?>" disabled>
                 </div>
 
               </div>
@@ -231,6 +235,11 @@ $error_perfil = isset($_GET['error']) && $_GET['error'] === 'perfil';
               <div class="perfil-section__sub">
                 <h3 class="perfil-section__sub-title">Domicilio</h3>
                 <div class="perfil-grid">
+                  <div class="form__group perfil-grid--full">
+                    <label class="form__label">Fraccionamiento</label>
+                    <input type="text" class="form__input"
+                           value="<?= htmlspecialchars($fraccionamiento) ?>" disabled>
+                  </div>
                   <div class="form__group">
                     <label class="form__label">Número de calle</label>
                     <input type="text" name="num_calle" class="form__input perfil-input"
@@ -245,6 +254,11 @@ $error_perfil = isset($_GET['error']) && $_GET['error'] === 'perfil';
                     <label class="form__label">Color de la casa</label>
                     <input type="text" name="color_casa" class="form__input perfil-input"
                            value="<?= htmlspecialchars($color_casa) ?>" disabled>
+                  </div>
+                  <div class="form__group">
+                    <label class="form__label">Ubicacion en mapa</label>
+                    <input type="text" class="form__input"
+                           value="<?= htmlspecialchars($ubicacion_mapa) ?>" disabled>
                   </div>
                 </div>
               </div>
@@ -377,6 +391,8 @@ $error_perfil = isset($_GET['error']) && $_GET['error'] === 'perfil';
 
     <?php if ($ok_perfil): ?>
       mostrarToast('Perfil actualizado correctamente.', 'success');
+    <?php elseif ($error_demo): ?>
+      mostrarToast('Esta cuenta demo esta protegida para mantener estable la demo publica.', 'error');
     <?php elseif ($error_perfil): ?>
       mostrarToast('Error al guardar el perfil.', 'error');
     <?php endif; ?>

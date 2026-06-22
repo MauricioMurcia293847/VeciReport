@@ -309,6 +309,54 @@
   color: var(--accent);
 }
 
+.login-demo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(76, 184, 196, 0.28);
+  border-radius: var(--radius-sm);
+  background: rgba(76, 184, 196, 0.08);
+}
+
+.login-demo__title {
+  margin-bottom: 4px;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.login-demo__text {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.login-demo__actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.login-demo__btn {
+  border: 1px solid rgba(76, 184, 196, 0.38);
+  border-radius: 6px;
+  padding: 7px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.login-demo__btn:hover {
+  border-color: var(--agua-color);
+  color: var(--agua-color);
+}
+
 
 /* Panel decorativo derecho */
 .showcase__bg {
@@ -490,4 +538,8 @@
   .login__panel  { padding: 30px 20px; }
   .login__title  { font-size: 1.8rem; }
   .navbar--simple { padding: 14px 20px; }
+  .login-demo {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }

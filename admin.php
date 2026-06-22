@@ -45,10 +45,12 @@ $trab_ocupados = $total_trab - $trab_libres;
 // Reportes activos (pendiente + en_proceso) para el panel central — máximo 6
 $reportes_activos = $pdo->query("
     SELECT r.id, r.categoria, r.tipo, r.descripcion, r.estado, r.created_at,
+           f.nombre AS fraccionamiento,
            u.nombre AS v_nombre, u.apellidos AS v_apellidos,
            t.id AS t_id, t.nombre AS t_nombre, t.apellidos AS t_apellidos, t.especialidad
     FROM   reportes r
     JOIN   vecinos   v ON r.vecino_id    = v.id
+    JOIN   fraccionamientos f ON f.id = v.fraccionamiento_id
     JOIN   usuarios  u ON v.usuario_id   = u.id
     LEFT JOIN trabajadores t ON r.trabajador_id = t.id
     WHERE  r.estado IN ('pendiente','en_proceso')
@@ -65,9 +67,10 @@ $trabajadores = $pdo->query("
 
 // Vecinos más recientes (últimos 5)
 $vecinos_recientes = $pdo->query("
-    SELECT u.id AS uid, u.nombre, u.apellidos, u.estado, u.created_at, v.num_casa
+    SELECT u.id AS uid, u.nombre, u.apellidos, u.estado, u.created_at, v.num_casa, f.nombre AS fraccionamiento
     FROM   usuarios u
     JOIN   vecinos  v ON v.usuario_id = u.id
+    JOIN   fraccionamientos f ON f.id = v.fraccionamiento_id
     WHERE  u.rol = 'vecino'
     ORDER  BY u.created_at DESC
     LIMIT  5
@@ -147,6 +150,9 @@ $error = $_GET['error'] ?? '';
         <span>Vecinos</span>
       </a>
 
+      <a href="admin-fraccionamientos.php" class="sidebar__link">
+        <span>Fraccionamientos</span>
+      </a>
       <a href="directorio-admin.php" class="sidebar__link">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         <span>Trabajadores</span>
@@ -159,10 +165,7 @@ $error = $_GET['error'] ?? '';
 
       <p class="sidebar__section-label">Cuenta</p>
 
-      <a href="App/controllers/UsuarioController.php?accion=logout" class="sidebar__link sidebar__link--logout">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        <span>Cerrar sesión</span>
-      </a>
+      <?= formularioLogout() ?>
     </nav>
 
     <div class="sidebar__user">
@@ -317,6 +320,7 @@ $error = $_GET['error'] ?? '';
                   <div class="admin-table__avatar"><?= $v_ini ?></div>
                   <span><?= $v_nom ?></span>
                 </div>
+                <span class="ar-card__fecha"><?= htmlspecialchars($r['fraccionamiento']) ?></span>
                 <span class="ar-card__fecha"><?= tiempoRelativo($r['created_at']) ?></span>
               </div>
 
@@ -414,7 +418,8 @@ $error = $_GET['error'] ?? '';
                 <div class="admin-vecino__avatar<?= $color_v ? ' admin-vecino__avatar' . $color_v : '' ?>"><?= $v_ini ?></div>
                 <div class="admin-vecino__info">
                   <p class="admin-vecino__name"><?= htmlspecialchars($v['nombre'] . ' ' . $v['apellidos']) ?></p>
-                  <p class="admin-vecino__meta">Casa #<?= htmlspecialchars($v['num_casa']) ?> · <?= tiempoRelativo($v['created_at']) ?></p>
+                  <p class="admin-vecino__meta"><?= htmlspecialchars($v['fraccionamiento']) ?> · Casa #<?= htmlspecialchars($v['num_casa']) ?></p>
+                  <p class="admin-vecino__meta"><?= tiempoRelativo($v['created_at']) ?></p>
                 </div>
                 <span class="admin-vecino__badge <?= $badge_cls ?>"><?= htmlspecialchars($badge_lbl) ?></span>
               </div>
@@ -435,11 +440,6 @@ $error = $_GET['error'] ?? '';
 
   <script src="Carpeta JS/funciones.js"></script>
   <script>
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('sidebar--open');
-      document.getElementById('sidebarOverlay').classList.toggle('overlay--visible');
-    }
-
     document.querySelectorAll('.kpi-card').forEach((card, i) => {
       card.style.animationDelay = `${i * 0.07}s`;
       card.classList.add('animate-in');

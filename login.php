@@ -1,4 +1,4 @@
-<?php require_once 'App/helpers/auth.php'; generarCSRF(); ?>
+<?php require_once 'App/helpers/auth.php'; generarCSRF(); $demo_activo = appDemoMode(); ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -28,7 +28,7 @@
   <nav class="navbar navbar--simple">
 
     <!-- Logo: al hacer clic regresa al inicio -->
-    <a href="index.html" class="navbar__brand">
+    <a href="index.php" class="navbar__brand">
       <div class="navbar__logo">
         <!-- Mismo SVG del index para consistencia -->
         <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
@@ -44,7 +44,7 @@
     <!-- Link para redirigir a registro -->
     <div class="navbar__actions">
       <span class="navbar__hint">¿No tienes cuenta?</span>
-      <a href="registro.html" class="btn btn--primary">Registrarse</a>
+      <a href="registro.php" class="btn btn--primary">Registrarse</a>
     </div>
   </nav>
 
@@ -167,6 +167,19 @@
             <span>¡Registro exitoso! Ahora puedes iniciar sesión.</span>
           </div>
 
+          <?php if ($demo_activo): ?>
+            <div class="login-demo">
+              <div>
+                <p class="login-demo__title">Demo publica</p>
+                <p class="login-demo__text">Usa una cuenta de prueba para revisar el flujo completo.</p>
+              </div>
+              <div class="login-demo__actions">
+                <button type="button" class="login-demo__btn" data-correo="admin@vecireport.com" data-password="admin1234">Admin</button>
+                <button type="button" class="login-demo__btn" data-correo="vecino.demo@vecireport.com" data-password="demo123">Vecino</button>
+              </div>
+            </div>
+          <?php endif; ?>
+
           <!-- boton -->
           <button type="submit" class="btn btn--primary btn--full" id="btnLogin">
             <span class="btn__text">Iniciar sesión</span>
@@ -177,7 +190,7 @@
           <!-- Link para ir al registro -->
           <p class="login__register-link">
             ¿No tienes cuenta?
-            <a href="registro.html">Regístrate aquí</a>
+            <a href="registro.php">Regístrate aquí</a>
           </p>
 
         </form>
@@ -315,6 +328,14 @@
     // Esto es validación front-end (no reemplaza
     // la validación en PHP, solo mejora la UX).
 
+    document.querySelectorAll('.login-demo__btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.getElementById('correo').value = btn.dataset.correo;
+        document.getElementById('password').value = btn.dataset.password;
+        document.getElementById('alertError').style.display = 'none';
+      });
+    });
+
     document.querySelector('.login__form').addEventListener('submit', function(e) {
       e.preventDefault(); // Evita el envío inmediato para validar primero
 
@@ -362,7 +383,7 @@
     });
 
     // detecta si venimos del registro
-    // El registro.html agrega ?registro=ok a la URL
+    // El registro.php agrega ?registro=ok a la URL
     // Si lo detectamos, mostramos el mensaje de éxito
     const params = new URLSearchParams(window.location.search);
     if (params.get('registro') === 'ok') {

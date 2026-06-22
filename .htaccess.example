@@ -1,0 +1,16 @@
+# VeciReport - plantilla opcional para Apache/cPanel
+
+Options -Indexes
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # En muchos hostings no hace falta reescritura porque VeciReport usa
+    # archivos PHP directos. Este archivo deja preparada la raiz y evita
+    # listado de directorios.
+</IfModule>
+
+<FilesMatch "\.(env|ini|log|sql|bak)$">
+    Require all denied
+</FilesMatch>
