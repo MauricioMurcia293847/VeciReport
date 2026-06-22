@@ -1,5 +1,3 @@
-﻿-- VeciReport - Datos demo para portafolio
--- Ejecutar sobre una base existente despues de las migraciones.
 
 
 START TRANSACTION;

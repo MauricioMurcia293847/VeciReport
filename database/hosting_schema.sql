@@ -1,25 +1,7 @@
-﻿--  VeciReport â€” Esquema completo de base de datos
---  VersiÃ³n: 2025-06
---
---  Uso: ejecutar completo en MySQL Workbench o desde consola:
---       mysql -u root -p < database/vecireport.sql
---
---  Datos incluidos:
---    Â· 1 usuario admin  (contraseÃ±a inicial: admin1234)
---    Â· 8 trabajadores ficticios de prueba
---
---  Tambien se incluye un vecino demo activo con reportes de ejemplo.
---
---  âš  PRODUCCIÃ“N: cambiar la contraseÃ±a del admin con:
---      UPDATE usuarios
---      SET password_hash = '<hash generado con password_hash() en PHP>'
---      WHERE correo = 'admin@vecireport.com';
---
 
 
 
 
--- Eliminar tablas existentes (orden inverso de dependencias FK)
 
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -34,9 +16,6 @@ DROP TABLE IF EXISTS fraccionamientos;
 SET FOREIGN_KEY_CHECKS = 1;
 
 
--- usuarios
--- Almacena vecinos y el admin. Los vecinos quedan 'pendiente' hasta
--- que el admin los aprueba.
 CREATE TABLE usuarios (
     id            INT UNSIGNED  NOT NULL AUTO_INCREMENT,
     nombre        VARCHAR(100)  NOT NULL,
@@ -54,8 +33,6 @@ CREATE TABLE usuarios (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- fraccionamientos
--- Catalogo de comunidades permitidas para registro de vecinos.
 CREATE TABLE fraccionamientos (
     id          INT UNSIGNED NOT NULL AUTO_INCREMENT,
     nombre      VARCHAR(120) NOT NULL,
@@ -69,9 +46,6 @@ CREATE TABLE fraccionamientos (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- vecinos
--- Perfil extendido del vecino: domicilio y comprobante. RelaciÃ³n
--- 1-1 con usuarios (solo rol='vecino').
 CREATE TABLE vecinos (
     id                INT UNSIGNED  NOT NULL AUTO_INCREMENT,
     usuario_id        INT UNSIGNED  NOT NULL,
@@ -96,9 +70,6 @@ CREATE TABLE vecinos (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- trabajadores
--- Especialistas del fraccionamiento. No tienen cuenta en el sistema;
--- el admin los gestiona directamente en la BD.
 CREATE TABLE trabajadores (
     id             INT UNSIGNED  NOT NULL AUTO_INCREMENT,
     nombre         VARCHAR(100)  NOT NULL,
@@ -113,9 +84,6 @@ CREATE TABLE trabajadores (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- reportes
--- Incidencias creadas por vecinos. El trabajador_id es NULL hasta
--- que el admin asigna un especialista.
 CREATE TABLE reportes (
     id             INT UNSIGNED  NOT NULL AUTO_INCREMENT,
     vecino_id      INT UNSIGNED  NOT NULL,
@@ -140,9 +108,6 @@ CREATE TABLE reportes (
         ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- asignaciones
--- Historial de cada vez que el admin asignÃ³ un trabajador a un
--- reporte. Permite trazabilidad completa aunque el reporte cambie.
 CREATE TABLE asignaciones (
     id             INT UNSIGNED  NOT NULL AUTO_INCREMENT,
     reporte_id     INT UNSIGNED  NOT NULL,
@@ -164,9 +129,6 @@ CREATE TABLE asignaciones (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- bitacora
--- Registro inmutable de acciones del sistema. usuario_id puede ser
--- NULL para acciones de sistema sin sesiÃ³n asociada.
 CREATE TABLE bitacora (
     id          INT UNSIGNED  NOT NULL AUTO_INCREMENT,
     usuario_id  INT UNSIGNED  DEFAULT NULL,
@@ -188,12 +150,8 @@ CREATE TABLE bitacora (
 
 
 
---  DATOS INICIALES
 
 
--- Admin
--- ContraseÃ±a inicial: admin1234
--- Hash generado con: password_hash('admin1234', PASSWORD_DEFAULT)
 INSERT INTO usuarios (nombre, apellidos, correo, password_hash, rol, estado)
 VALUES (
     'Guardia',
@@ -205,7 +163,6 @@ VALUES (
 );
 
 
--- Fraccionamiento demo
 INSERT INTO fraccionamientos (nombre, direccion, mapa_poligono, activo)
 VALUES (
     'Fraccionamiento VeciReport',
@@ -214,8 +171,6 @@ VALUES (
     1
 );
 
--- Trabajadores (8 ficticios â€” 2 por especialidad + 2 generales)
--- Los telÃ©fonos usan el Ã¡rea 656 (Ciudad JuÃ¡rez).
 INSERT INTO trabajadores (nombre, apellidos, especialidad, telefono, disponibilidad)
 VALUES
     ('Carlos',    'RamÃ­rez Ortiz',     'electricista', '656-100-2201', 'disponible'),
@@ -228,8 +183,6 @@ VALUES
     ('JosÃ©',      'Morales Cervantes', 'general',      '656-100-2208', 'disponible');
 
 
--- Vecino demo para portafolio
--- Password inicial: demo123
 INSERT INTO usuarios (nombre, apellidos, correo, password_hash, rol, estado)
 VALUES (
     'Vecino',
