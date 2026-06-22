@@ -19,7 +19,7 @@ VALUES (
     'Vecino',
     'Demo',
     'vecino.demo@vecireport.com',
-    '$2y$12$taBh0kiYx5MQgayCJLek9ubD2UOqOLYCaTGeCJWrxMWfNoAgFQtCK',
+    '$2y$12$qkdw1MXE3ySwCOuIkKNJxeMb/2yhcH06guBJ6FLD50/zni13h6xrm',
     'vecino',
     'activo'
 )
@@ -137,3 +137,4 @@ WHERE correo = 'admin@vecireport.com'
 LIMIT 1;
 
 COMMIT;
+

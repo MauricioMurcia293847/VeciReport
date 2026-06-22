@@ -1,16 +1,16 @@
---  VeciReport — Esquema completo de base de datos
---  Versión: 2025-06
+--  VeciReport - Esquema completo de base de datos
+--  Version: 2025-06
 --
 --  Uso: ejecutar completo en MySQL Workbench o desde consola:
 --       mysql -u root -p < database/vecireport.sql
 --
 --  Datos incluidos:
---    · 1 usuario admin  (contraseña inicial: admin1234)
---    · 8 trabajadores ficticios de prueba
+--    - 1 usuario admin  (contrasena inicial: VeciAdmin!2026#Demo)
+--    - 8 trabajadores ficticios de prueba
 --
 --  Tambien se incluye un vecino demo activo con reportes de ejemplo.
 --
---  ⚠ PRODUCCIÓN: cambiar la contraseña del admin con:
+--  PRODUCCION: cambiar la contrasena del admin con:
 --      UPDATE usuarios
 --      SET password_hash = '<hash generado con password_hash() en PHP>'
 --      WHERE correo = 'admin@vecireport.com';
@@ -74,7 +74,7 @@ CREATE TABLE fraccionamientos (
 
 
 -- vecinos
--- Perfil extendido del vecino: domicilio y comprobante. Relación
+-- Perfil extendido del vecino: domicilio y comprobante. Relacion
 -- 1-1 con usuarios (solo rol='vecino').
 CREATE TABLE vecinos (
     id                INT UNSIGNED  NOT NULL AUTO_INCREMENT,
@@ -145,7 +145,7 @@ CREATE TABLE reportes (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- asignaciones
--- Historial de cada vez que el admin asignó un trabajador a un
+-- Historial de cada vez que el admin asigno un trabajador a un
 -- reporte. Permite trazabilidad completa aunque el reporte cambie.
 CREATE TABLE asignaciones (
     id             INT UNSIGNED  NOT NULL AUTO_INCREMENT,
@@ -170,7 +170,7 @@ CREATE TABLE asignaciones (
 
 -- bitacora
 -- Registro inmutable de acciones del sistema. usuario_id puede ser
--- NULL para acciones de sistema sin sesión asociada.
+-- NULL para acciones de sistema sin sesion asociada.
 CREATE TABLE bitacora (
     id          INT UNSIGNED  NOT NULL AUTO_INCREMENT,
     usuario_id  INT UNSIGNED  DEFAULT NULL,
@@ -196,14 +196,14 @@ CREATE TABLE bitacora (
 
 
 -- Admin
--- Contraseña inicial: admin1234
--- Hash generado con: password_hash('admin1234', PASSWORD_DEFAULT)
+-- Contrasena inicial: VeciAdmin!2026#Demo
+-- Hash generado con: password_hash('VeciAdmin!2026#Demo', PASSWORD_DEFAULT)
 INSERT INTO usuarios (nombre, apellidos, correo, password_hash, rol, estado)
 VALUES (
     'Guardia',
     'Admin',
     'admin@vecireport.com',
-    '$2y$12$Kx/E/9GFf23zuZLfJwLvweD3wEF9aQc842ch92.B1Gg6N0KRjmTlq',
+    '$2y$12$.w3Wv9tRjbj.VNIH8rbXeOH3qcj8u1tvYRsnDvkhGtpAJtnv4u6CG',
     'admin',
     'activo'
 );
@@ -218,28 +218,28 @@ VALUES (
     1
 );
 
--- Trabajadores (8 ficticios — 2 por especialidad + 2 generales)
--- Los teléfonos usan el área 656 (Ciudad Juárez).
+-- Trabajadores (8 ficticios - 2 por especialidad + 2 generales)
+-- Los telefonos usan el area 656 (Ciudad Juarez).
 INSERT INTO trabajadores (nombre, apellidos, especialidad, telefono, disponibilidad)
 VALUES
-    ('Carlos',    'Ramírez Ortiz',     'electricista', '656-100-2201', 'disponible'),
+    ('Carlos',    'Ramirez Ortiz',     'electricista', '656-100-2201', 'disponible'),
     ('Miguel',    'Flores Herrera',    'electricista', '656-100-2202', 'disponible'),
     ('Arturo',    'Mendoza Soto',      'plomero',      '656-100-2203', 'disponible'),
     ('Roberto',   'Vargas Castillo',   'plomero',      '656-100-2204', 'disponible'),
-    ('Francisco', 'Torres Jiménez',    'albanil',      '656-100-2205', 'disponible'),
+    ('Francisco', 'Torres Jimenez',    'albanil',      '656-100-2205', 'disponible'),
     ('Ernesto',   'Luna Espinoza',     'jardinero',    '656-100-2206', 'disponible'),
-    ('Héctor',    'Gutiérrez Ramos',   'general',      '656-100-2207', 'disponible'),
-    ('José',      'Morales Cervantes', 'general',      '656-100-2208', 'disponible');
+    ('Hector',    'Gutierrez Ramos',   'general',      '656-100-2207', 'disponible'),
+    ('Jose',      'Morales Cervantes', 'general',      '656-100-2208', 'disponible');
 
 
 -- Vecino demo para portafolio
--- Password inicial: demo123
+-- Password inicial: VecinoDemo!2026#Ok
 INSERT INTO usuarios (nombre, apellidos, correo, password_hash, rol, estado)
 VALUES (
     'Vecino',
     'Demo',
     'vecino.demo@vecireport.com',
-    '$2y$12$taBh0kiYx5MQgayCJLek9ubD2UOqOLYCaTGeCJWrxMWfNoAgFQtCK',
+    '$2y$12$qkdw1MXE3ySwCOuIkKNJxeMb/2yhcH06guBJ6FLD50/zni13h6xrm',
     'vecino',
     'activo'
 );
@@ -310,3 +310,4 @@ INSERT INTO bitacora (usuario_id, tipo_accion, descripcion, ip)
 SELECT id, 'sistema', 'Datos demo cargados para portafolio', '127.0.0.1'
 FROM usuarios
 WHERE correo = 'admin@vecireport.com';
+

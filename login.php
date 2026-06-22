@@ -174,8 +174,8 @@
                 <p class="login-demo__text">Usa una cuenta de prueba para revisar el flujo completo.</p>
               </div>
               <div class="login-demo__actions">
-                <button type="button" class="login-demo__btn" data-correo="admin@vecireport.com" data-password="admin1234">Admin</button>
-                <button type="button" class="login-demo__btn" data-correo="vecino.demo@vecireport.com" data-password="demo123">Vecino</button>
+                <button type="button" class="login-demo__btn" data-correo="admin@vecireport.com" data-password="VeciAdmin!2026#Demo">Admin</button>
+                <button type="button" class="login-demo__btn" data-correo="vecino.demo@vecireport.com" data-password="VecinoDemo!2026#Ok">Vecino</button>
               </div>
             </div>
           <?php endif; ?>

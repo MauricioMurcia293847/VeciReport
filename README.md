@@ -6,6 +6,12 @@ VeciReport permite que los vecinos registren problemas de luz, agua, mantenimien
 
 Proyecto desarrollado como aplicacion web academica y preparado como proyecto de portafolio para LinkedIn/GitHub.
 
+Demo publica:
+
+```text
+https://vecireport.gt.tc/
+```
+
 ---
 
 ## Vista General
@@ -184,7 +190,7 @@ El archivo `database/vecireport.sql` incluye un administrador inicial:
 
 ```text
 Correo: admin@vecireport.com
-Password: admin1234
+Password: VeciAdmin!2026#Demo
 ```
 
 Para probar como vecino:
@@ -197,8 +203,8 @@ Para probar como vecino:
 Credenciales incluidas para demo de portafolio:
 
 ```text
-Admin demo:  admin@vecireport.com / admin1234
-Vecino demo: vecino.demo@vecireport.com / demo123
+Admin demo:  admin@vecireport.com / VeciAdmin!2026#Demo
+Vecino demo: vecino.demo@vecireport.com / VecinoDemo!2026#Ok
 ```
 
 ---
@@ -239,10 +245,14 @@ VeciReport/
 |-- database/
 |   |-- vecireport.sql
 |   |-- demo_seed.sql
+|   |-- demo_seed_hosting.sql
+|   |-- hosting_schema.sql
+|   |-- update_demo_passwords_hosting.sql
 |   `-- migrations/
 |-- docs/
 |   |-- demo.md
 |   |-- hosting.md
+|   |-- linkedin-post.md
 |   `-- screenshots/
 `-- uploads/
     |-- comprobantes/
@@ -408,6 +418,12 @@ docs/hosting.md
 ```
 
 Incluye configuracion de base de datos, `APP_BASE_URL`, permisos de uploads y checklist de verificacion.
+
+Demo desplegada:
+
+```text
+https://vecireport.gt.tc/
+```
 
 ---
 

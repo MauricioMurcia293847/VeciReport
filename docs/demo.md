@@ -6,10 +6,10 @@ Esta guia deja VeciReport listo para una demo publica de portafolio sin exponer 
 
 | Rol | Correo | Password |
 |---|---|---|
-| Admin | `admin@vecireport.com` | `admin1234` |
-| Vecino | `vecino.demo@vecireport.com` | `demo123` |
+| Admin | `admin@vecireport.com` | `VeciAdmin!2026#Demo` |
+| Vecino | `vecino.demo@vecireport.com` | `VecinoDemo!2026#Ok` |
 
-En la base local actual puede existir otra contrasena de admin si fue cambiada manualmente. Para una instalacion fresca desde `database/vecireport.sql`, la contrasena inicial del admin es `admin1234`.
+En la base local actual puede existir otra contrasena de admin si fue cambiada manualmente. Para una instalacion fresca desde `database/vecireport.sql`, la contrasena inicial del admin es `VeciAdmin!2026#Demo`.
 
 ## Activar Modo Demo
 
@@ -48,6 +48,12 @@ database/demo_seed.sql
 
 `database/demo_seed.sql` se puede volver a ejecutar para restaurar el vecino demo y sus reportes de ejemplo.
 
+Si la base ya esta desplegada en InfinityFree y solo quieres actualizar las contrasenas demo, ejecutar:
+
+```text
+database/update_demo_passwords_hosting.sql
+```
+
 ## Mapa Real Del Fraccionamiento
 
 VeciReport usa Leaflet con OpenStreetMap para mostrar el mapa real. El campo `mapa_poligono` guarda un arreglo JSON de coordenadas reales:
@@ -82,3 +88,4 @@ Cuando `APP_DEMO_MODE` esta activo:
 5. Probar login admin y vecino demo.
 6. Verificar que no se muestren errores PHP.
 7. Tomar capturas finales desde `docs/screenshots/README.md`.
+8. Probar el enlace publico: `https://vecireport.gt.tc/`.

@@ -157,7 +157,7 @@ VALUES (
     'Guardia',
     'Admin',
     'admin@vecireport.com',
-    '$2y$12$Kx/E/9GFf23zuZLfJwLvweD3wEF9aQc842ch92.B1Gg6N0KRjmTlq',
+    '$2y$12$.w3Wv9tRjbj.VNIH8rbXeOH3qcj8u1tvYRsnDvkhGtpAJtnv4u6CG',
     'admin',
     'activo'
 );
@@ -188,7 +188,7 @@ VALUES (
     'Vecino',
     'Demo',
     'vecino.demo@vecireport.com',
-    '$2y$12$taBh0kiYx5MQgayCJLek9ubD2UOqOLYCaTGeCJWrxMWfNoAgFQtCK',
+    '$2y$12$qkdw1MXE3ySwCOuIkKNJxeMb/2yhcH06guBJ6FLD50/zni13h6xrm',
     'vecino',
     'activo'
 );
@@ -259,3 +259,4 @@ INSERT INTO bitacora (usuario_id, tipo_accion, descripcion, ip)
 SELECT id, 'sistema', 'Datos demo cargados para portafolio', '127.0.0.1'
 FROM usuarios
 WHERE correo = 'admin@vecireport.com';
+
